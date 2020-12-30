@@ -53,14 +53,18 @@ if (isMobile) {
   nCircles = 20;
   growRate = 3;
   mouseSquare = 70;
-  maxRadius = 50;
+  maxRadius = 40;
   minRadius = 10;
+  dxFactor = 5;
+  dyFactor = 5;
 } else {
   nCircles = 100;
   growRate = 5;
   mouseSquare = 100;
   maxRadius = 100;
   minRadius = 10;
+  dxFactor = 8;
+  dyFactor = 8;
 }
 
 // ------------------------------------------------------------
@@ -161,8 +165,8 @@ for (const i in [...Array(nCircles)]) {
   let x = Math.random() * (window.innerWidth - radius * 2) + radius; //x coordinate
   let y = Math.random() * (window.innerHeight - radius * 2) + radius; //y coordinate
 
-  let dx = (Math.random() - 0.5) * 8; //change in x
-  let dy = (Math.random() - 0.5) * 8; //change in y
+  let dx = (Math.random() - 0.5) * dxFactor; //change in x
+  let dy = (Math.random() - 0.5) * dyFactor; //change in y
   new Circle(x, y, dx, dy, radius);
 }
 
