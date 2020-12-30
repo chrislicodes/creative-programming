@@ -52,7 +52,7 @@ let minRadius = 10; //px;
 if (isMobile) {
   nCircles = 20;
   growRate = 3;
-  mouseSquare = 70;
+  mouseSquare = 40;
   maxRadius = 40;
   minRadius = 10;
   dxFactor = 5;
