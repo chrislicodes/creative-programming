@@ -2,6 +2,10 @@
 
 import { randomIntFromInterval } from "./utils.js";
 
+// ------------------------------------------------------------
+// ---- Canvas Setup
+// ------------------------------------------------------------
+
 //Selecting the canvas element
 const canvas = document.querySelector("canvas");
 
@@ -11,6 +15,49 @@ canvas.height = window.innerHeight;
 
 //Adding context to add methods for drawing
 const c = canvas.getContext("2d");
+
+// ------------------------------------------------------------
+// ---- Tracking Mouse - Events
+// ------------------------------------------------------------
+
+const mouse = {
+  x: undefined,
+  y: undefined,
+};
+
+//add Eventlisteners
+["mousemove", "touchmove"].forEach(() => {
+  window.addEventListener("mousemove", function (e) {
+    mouse.x = e.x;
+    mouse.y = e.y;
+  });
+});
+
+// ------------------------------------------------------------
+// ---- Config
+// ------------------------------------------------------------
+
+//TODO Config (transfer to new module)
+const isMobile =
+  Math.min(window.screen.width, window.screen.height) < 768 ||
+  navigator.userAgent.indexOf("Mobi") > -1;
+
+//number of circles
+let nCircles;
+isMobile ? (nCircles = 20) : (nCircles = 100);
+
+const mouseSquare = 100; //px
+
+const maxRadius = 100; //px
+const minRadius = 10; //px;
+const growRate = 5; //px;
+
+// ------------------------------------------------------------
+// ---- Circle Class
+// ------------------------------------------------------------
+
+//tracking all active circles
+const activeCircles = [];
 
 class Circle {
   type = "circle";
@@ -28,6 +75,8 @@ class Circle {
     //circle properties
     this.radius = radius;
     this.color = color;
+
+    this.minRadius = this.radius / 2;
     
     activeCircles.push(this);
 }
@@ -66,22 +115,40 @@ class Circle {
     this.x += this.dx;
     this.y += this.dy;
 
+    //interactivity
+
+    //Get distance from the circle to the mouse
+    if (
+      mouse.x - this.x < mouseSquare &&
+      mouse.x - this.x > -mouseSquare &&
+      mouse.y - this.y < mouseSquare &&
+      mouse.y - this.y > -mouseSquare
+    ) {
+      if (this.radius < maxRadius) {
+        this.radius += growRate;
+      }
+
+      this.color = "#303841";
+    } else if (this.radius > this.minRadius) {
+      this.radius -= growRate / 1.25;
+    }
+
     //Draw new circle
     this.draw();
   }
 }
 
-//tracking all active circles
-const activeCircles = [];
+// ------------------------------------------------------------
+// ---- Animation
+// ------------------------------------------------------------
 
-const nCircles = 50;
 //creating n Circles
 for (const i in [...Array(nCircles)]) {
   //random values
-  let radius = randomIntFromInterval(5, 50); //circle radius
+  let radius = randomIntFromInterval(minRadius, maxRadius); //circle radius
 
-  let x = Math.random() * (innerWidth - radius * 2) + radius; //x coordinate
-  let y = Math.random() * (innerHeight - radius * 2) + radius; //y coordinate
+  let x = Math.random() * (window.innerWidth - radius * 2) + radius; //x coordinate
+  let y = Math.random() * (window.innerHeight - radius * 2) + radius; //y coordinate
 
   let dx = (Math.random() - 0.5) * 8; //change in x
   let dy = (Math.random() - 0.5) * 8; //change in y
