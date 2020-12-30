@@ -16,7 +16,7 @@ class Circle {
   type = "circle";
 
   //prettier-ignore
-  constructor(x = window.innerWidth / 2, y = window.innerHeight / 2, dx = 1, dy = 1, radius = 50, color = "blue") {
+  constructor(x = window.innerWidth / 2, y = window.innerHeight / 2, dx = 1, dy = 1, radius = 50, color = "#303841") {
     //x and change in x
     this.x = x;
     this.dx = dx;
@@ -34,7 +34,8 @@ class Circle {
 
   draw() {
     //setting the color
-    c.strokeStyle = this.color;
+    c.strokeStyle = "black";
+    c.lineWidth = 6;
     c.fillStyle = this.color;
 
     //draw the circle
@@ -50,7 +51,7 @@ class Circle {
       this.dx = -this.dx;
 
       //change color to red while bouncing on x
-      this.color = "red";
+      this.color = "#FF5722";
     }
 
     //check for y bounce
@@ -58,7 +59,7 @@ class Circle {
       this.dy = -this.dy;
 
       //change color to green while bouncing on y
-      this.color = "green";
+      this.color = "#EEEEEE";
     }
 
     //Update position
@@ -73,11 +74,11 @@ class Circle {
 //tracking all active circles
 const activeCircles = [];
 
-const nCircles = 35;
+const nCircles = 50;
 //creating n Circles
 for (const i in [...Array(nCircles)]) {
   //random values
-  let radius = randomIntFromInterval(5, 100); //circle radius
+  let radius = randomIntFromInterval(5, 50); //circle radius
 
   let x = Math.random() * (innerWidth - radius * 2) + radius; //x coordinate
   let y = Math.random() * (innerHeight - radius * 2) + radius; //y coordinate
@@ -96,4 +97,5 @@ const animateCircle = function () {
   });
 };
 
+//Starting the animation
 animateCircle();
