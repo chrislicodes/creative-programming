@@ -32,8 +32,4 @@ body {
   line-height: 1.6;
   color: var(--color-grey-dark-2);
 }
-
-canvas {
-  border: 10px solid red;
-}
 /*# sourceMappingURL=main.css.map */
