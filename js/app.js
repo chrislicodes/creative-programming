@@ -44,13 +44,24 @@ const isMobile =
 
 //number of circles
 let nCircles;
-isMobile ? (nCircles = 20) : (nCircles = 100);
+let growRate = 5; //px;
+let mouseSquare = 100; //px
+let maxRadius = 100; //px
+let minRadius = 10; //px;
 
-const mouseSquare = 100; //px
-
-const maxRadius = 100; //px
-const minRadius = 10; //px;
-const growRate = 5; //px;
+if (isMobile) {
+  nCircles = 20;
+  growRate = 3;
+  mouseSquare = 70;
+  maxRadius = 50;
+  minRadius = 10;
+} else {
+  nCircles = 100;
+  growRate = 5;
+  mouseSquare = 100;
+  maxRadius = 100;
+  minRadius = 10;
+}
 
 // ------------------------------------------------------------
 // ---- Circle Class
