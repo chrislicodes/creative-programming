@@ -26,16 +26,44 @@ const mouse = {
 };
 
 //add Eventlisteners
-["mousemove", "touchmove"].forEach(() => {
-  canvas.addEventListener("mousemove", function (e) {
+["mousemove", "touchmove"].forEach((event) => {
+  canvas.addEventListener(event, function (e) {
     mouse.x = e.x;
     mouse.y = e.y;
   });
 });
-["mouseleave", "touchleave"].forEach(() => {
-  canvas.addEventListener("mousemove", function (e) {
-    mouse.x = e.x;
-    mouse.y = e.y;
+
+["mouseleave", "touchleave"].forEach((event) => {
+  canvas.addEventListener(event, function (e) {
+    mouse.x = undefined;
+    mouse.y = undefined;
+  });
+});
+
+window.addEventListener("resize", function () {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+canvas.addEventListener("click", function (e) {
+  //getting coordinates
+  const x = e.x;
+  const y = e.y;
+
+  activeCircles.forEach((circle) => {
+    circle.dx = (x - circle.x) * 0.01;
+    circle.dy = (y - circle.y) * 0.01;
+  });
+});
+
+canvas.addEventListener("dblclick", function (e) {
+  //getting coordinates
+  const x = e.x;
+  const y = e.y;
+
+  activeCircles.forEach((circle) => {
+    circle.dx = (x - circle.x) * -0.1 * Math.random();
+    circle.dy = (y - circle.y) * -0.1 * Math.random();
   });
 });
 
@@ -71,8 +99,8 @@ if (isMobile) {
   mouseSquare = 100;
   maxRadius = 100;
   minRadius = 10;
-  dxFactor = 8;
-  dyFactor = 8;
+  dxFactor = 5;
+  dyFactor = 5;
 }
 
 // ------------------------------------------------------------
