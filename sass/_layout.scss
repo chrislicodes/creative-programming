@@ -1,5 +1,9 @@
+.app-container {
+  position: relative;
+}
 .canvas-container {
   position: relative;
+  display: flex;
 
   canvas,
   &__overlay {
@@ -16,11 +20,18 @@
   }
 }
 
-.header__version {
-  position: absolute;
+.header {
+  &__version {
+    position: absolute;
+  }
+
+  &__logo {
+    position: absolute;
+    display: inline-block;
+  }
 }
 
-.header__logo {
-  position: absolute;
-  display: inline-block;
+.coding-labs {
+  display: flex;
+  height: 200px;
 }

@@ -1,6 +1,6 @@
 :root {
   --color-primary-light: #5cade4;
-  --color-primary-dark: #153243;
+  --color-primary-dark: #2a516b;
   --color-secondary-light: #eef0eb;
   --color-secondary-dark: #b4b8ab;
   --color-grey-light-1: #faf9f9;
@@ -58,6 +58,9 @@ body {
   font-weight: 600;
   font-size: 2.5rem;
   color: var(--color-primary-light);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .author-name {
@@ -65,8 +68,15 @@ body {
   font-weight: 600;
 }
 
+.app-container {
+  position: relative;
+}
+
 .canvas-container {
   position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .canvas-container canvas, .canvas-container__overlay {
@@ -95,5 +105,12 @@ body {
 .header__logo {
   position: absolute;
   display: inline-block;
+}
+
+.coding-labs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 200px;
 }
 /*# sourceMappingURL=main.css.map */
