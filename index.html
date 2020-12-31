@@ -17,30 +17,35 @@
     <script type="module" src="js/app.js" defer></script>
   </head>
   <body>
-    <div class="flex-container">
-      <header class="header">
-        <img src="/img/logo-white.png" alt="Logo" class="header__logo" />
-        <aside class="header__version">v0.0.1</aside>
-      </header>
+    <div class="app-container">
 
-      <main class="main-content">
+      <header class="header">
+        
         <div class="canvas-container">
-          <canvas class="canvas-container__canvas"></canvas>
+          <img src="/img/logo-white.png" alt="Logo" class="header__logo" />
+          <aside class="header__version">v0.0.1</aside>
+
+          <canvas></canvas>
+
           <div class="canvas-container__overlay">
-            <div class="canvas-container__text-box">
               <div class="heading__text-box">
+                <p class = "heading__intro">Hi, this is a</p>
                 <h1 class="heading-primary">
                   <span class="heading-primary--main">Creative Coding Lab</span>
                   <span class="heading-primary--sub"
-                    >by < chrisLiCodes />
+                    >by <span class="author-name">< chrislicodes /></span>
                   </span>
                 </h1>
               </div>
             </div>
           </div>
-          <a href="gravity-bubbles/index.html">Gravity Bubbles</a>
         </div>
+      </header>
+
+      <main class="main-content">
+        <section class = "coding-labs"></section>        
       </main>
+
       <footer class="footer">
         <div class="footer__social-media"></div>
       </footer>

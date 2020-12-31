@@ -1,8 +1,7 @@
 .canvas-container {
   position: relative;
-  display: flex;
 
-  &__canvas,
+  canvas,
   &__overlay {
     position: absolute;
   }
@@ -13,15 +12,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(19, 19, 19, 0.85);
+    background-color: rgba(26, 25, 25, 0.97);
   }
+}
 
-  &__text-box {
-    color: white;
-    font-size: 4rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-transform: uppercase;
-  }
+.header__version {
+  position: absolute;
+}
+
+.header__logo {
+  position: absolute;
+  display: inline-block;
 }
