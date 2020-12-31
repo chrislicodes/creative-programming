@@ -27,7 +27,13 @@ const mouse = {
 
 //add Eventlisteners
 ["mousemove", "touchmove"].forEach(() => {
-  window.addEventListener("mousemove", function (e) {
+  canvas.addEventListener("mousemove", function (e) {
+    mouse.x = e.x;
+    mouse.y = e.y;
+  });
+});
+["mouseleave", "touchleave"].forEach(() => {
+  canvas.addEventListener("mousemove", function (e) {
     mouse.x = e.x;
     mouse.y = e.y;
   });
@@ -44,10 +50,12 @@ const isMobile =
 
 //number of circles
 let nCircles;
-let growRate = 5; //px;
-let mouseSquare = 100; //px
-let maxRadius = 100; //px
-let minRadius = 10; //px;
+let growRate; //px;
+let mouseSquare; //px
+let maxRadius; //px
+let minRadius; //px;
+let dxFactor;
+let dyFactor;
 
 if (isMobile) {
   nCircles = 20;
@@ -170,6 +178,7 @@ for (const i in [...Array(nCircles)]) {
   new Circle(x, y, dx, dy, radius);
 }
 
+//animation loop
 const animateCircle = function () {
   requestAnimationFrame(animateCircle); //animation works by "refreshing" the page a certain amount of time -> fps
   c.clearRect(0, 0, innerWidth, innerHeight); //clearing the entire canvas
