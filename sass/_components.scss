@@ -1,1 +1,16 @@
+.header {
+  position: absolute;
+  background-image: linear-gradient(
+    to right bottom,
+    rgba(var(--color-primary-light), 0.8),
+    rgba(var(--color-primary-dark), 0.8)
+  );
+  background-size: cover;
+}
 
+.heading-primary {
+  &--main,
+  &--sub {
+    display: block;
+  }
+}

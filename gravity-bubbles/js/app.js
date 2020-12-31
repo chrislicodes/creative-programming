@@ -100,8 +100,8 @@ if (isMobile) {
   mouseSquare = 100;
   maxRadius = 100;
   minRadius = 10;
-  dxFactor = 3;
-  dyFactor = 3;
+  dxFactor = 5;
+  dyFactor = 5;
 }
 
 // ------------------------------------------------------------

@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Creative Programming v0.1</title>
+    <title>Creative Coding Lab</title>
     <meta
       name="description"
-      content="Creative Visual JavaScript Applications"
+      content="Creative Coding JavaScript Applications"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
@@ -17,9 +17,33 @@
     <script type="module" src="js/app.js" defer></script>
   </head>
   <body>
-    <main class="canvas-container">
-      <canvas></canvas>
-      <a href="gravity-bubble/index.html">Gravity Bubbles</a>
-    </main>
+    <div class="flex-container">
+      <header class="header">
+        <img src="/img/logo-white.png" alt="Logo" class="header__logo" />
+        <aside class="header__version">v0.0.1</aside>
+      </header>
+
+      <main class="main-content">
+        <div class="canvas-container">
+          <canvas class="canvas-container__canvas"></canvas>
+          <div class="canvas-container__overlay">
+            <div class="canvas-container__text-box">
+              <div class="heading__text-box">
+                <h1 class="heading-primary">
+                  <span class="heading-primary--main">Creative Coding Lab</span>
+                  <span class="heading-primary--sub"
+                    >by < chrisLiCodes />
+                  </span>
+                </h1>
+              </div>
+            </div>
+          </div>
+          <a href="gravity-bubbles/index.html">Gravity Bubbles</a>
+        </div>
+      </main>
+      <footer class="footer">
+        <div class="footer__social-media"></div>
+      </footer>
+    </div>
   </body>
 </html>
