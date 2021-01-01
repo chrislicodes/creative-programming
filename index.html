@@ -1,56 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Creative Coding Lab</title>
-    <meta
-      name="description"
-      content="Creative Coding JavaScript Applications"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="css/main.css" />
-    <script type="module" src="js/app.js" defer></script>
-  </head>
-  <body>
-    <div class="app-container">
 
-      <header class="header">
-        
-        <div class="canvas-container">
-          <img src="/img/logo-white.png" alt="Logo" class="header__logo" />
-          <aside class="header__version">v0.0.1</aside>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Creative Coding Lab</title>
+  <meta name="description" content="Creative Coding JavaScript Applications" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+  <script type="module" src="js/app.js" defer></script>
+</head>
 
-          <canvas></canvas>
+<body>
+  <header class="header">
+    <div class="header__overlay"></div>
 
-          <div class="canvas-container__overlay">
-              <div class="heading__text-box">
-                <p class = "heading__intro">Hi, this is a</p>
-                <h1 class="heading-primary">
-                  <span class="heading-primary--main">Creative Coding Lab</span>
-                  <span class="heading-primary--sub"
-                    >by <span class="author-name">< chrislicodes /></span>
-                  </span>
-                </h1>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+    <canvas class="header__canvas"></canvas>
 
-      <main class="main-content">
-        <section class = "coding-labs">
-          <h2>Test</h2>
-        </section>        
-      </main>
-
-      <footer class="footer">
-        <div class="footer__social-media"></div>
-      </footer>
+    <div class="header__nav-box">
+      <img src="/img/logo-white.png" alt="Logo" class="header__logo" />
+      <aside class="header__version">v0.0.1</aside>
     </div>
-  </body>
+
+    <div class="header__text-box">
+      <div class="heading">
+        <p class="heading__intro">Hi there, this is a</p>
+
+        <h1 class="heading-primary">
+          <span class="heading-primary--main">Creative Coding Lab</span>
+          <span class="heading-primary--sub">Animation and Interactivity with JavaScript</span>
+        </h1>
+
+        <p class="heading__author">
+          by <span class="author-name">
+            < chrislicodes />
+          </span>
+        </p>
+      </div>
+    </div>
+
+    <!-- <div class="header__button-box">
+      <a href="#" class="btn btn--white btn--animated">Start Exploring</a>
+      <a href="#" class="btn btn--white btn--animated">Start Exploring</a>
+    </div> -->
+  </header>
+
+  <main class="main">
+    <section class="coding-labs">
+      <!-- <h2 class="heading-secondary">Test</h2> -->
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__social-media"></div>
+  </footer>
+</body>
+
 </html>
