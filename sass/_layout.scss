@@ -68,7 +68,7 @@
     svg {
       height: 3rem;
       width: 3rem;
-      fill: var(--color-grey-light-4);
+      fill: var(--color-grey-light-5);
       transition: all 0.2s;
     }
   }
@@ -85,6 +85,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  margin: 0rem 5rem;
 
   &:after {
     content: "";
@@ -97,6 +98,10 @@
     height: 80%;
     width: 50%;
     animation: expandLine 1.5s ease;
+
+    @include respond-tablet-portrait {
+      display: none;
+    }
   }
 
   &:before {
@@ -110,6 +115,9 @@
     height: 80%;
     width: 50%;
     animation: expandLine 1.5s;
+    @include respond-tablet-portrait {
+      display: none;
+    }
   }
 }
 

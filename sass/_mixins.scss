@@ -1,0 +1,20 @@
+// MEDIA QUERY MANAGER
+/*
+0 - 600px: Phone
+600 - 910px: Tablet Portrait
+910 - 1200px: Tablet landscape
+[1200 - 1800] - Developed
+1800px+ - Big Screen
+*/
+
+@mixin respond-phone {
+  @media (max-width: 600px) {
+    @content;
+  }
+}
+
+@mixin respond-tablet-portrait {
+  @media (max-width: 910px) {
+    @content;
+  }
+}

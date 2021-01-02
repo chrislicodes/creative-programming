@@ -11,7 +11,7 @@ const canvas = document.querySelector("canvas");
 
 //Setting the size of canvas
 canvas.width = document.body.clientWidth;
-canvas.height = window.innerHeight;
+canvas.height = document.body.clientHeight;
 
 //Adding context to add methods for drawing
 const c = canvas.getContext("2d");
@@ -41,8 +41,8 @@ const mouse = {
 });
 
 window.addEventListener("resize", function () {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.width = document.body.clientWidth;
+  canvas.height = document.body.clientHeight;
 });
 
 canvas.addEventListener("click", function (e) {
