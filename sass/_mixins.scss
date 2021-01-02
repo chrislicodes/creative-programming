@@ -1,8 +1,9 @@
 // MEDIA QUERY MANAGER
 /*
 0 - 600px: Phone
-600 - 910px: Tablet Portrait
-910 - 1200px: Tablet landscape
+600 - 900px: Tablet Portrait
+900 - 1000px:
+100 - 1200px: Tablet landscape
 [1200 - 1800] - Developed
 1800px+ - Big Screen
 */
@@ -14,7 +15,13 @@
 }
 
 @mixin respond-tablet-portrait {
-  @media (max-width: 910px) {
+  @media (max-width: 900px) {
+    @content;
+  }
+}
+
+@mixin respond-tablet-effect {
+  @media (max-width: 1000px), (max-height: 700px) {
     @content;
   }
 }

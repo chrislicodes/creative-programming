@@ -33,6 +33,10 @@ html {
   box-sizing: border-box;
   font-size: 62.5%; //1rem = 10px; Browser Default is 16px
 
+  @include respond-tablet-effect {
+    font-size: 55%;
+  }
+
   @include respond-tablet-portrait {
     font-size: 50%;
   }
