@@ -192,13 +192,13 @@ body {
 }
 
 .header__nav-box .contact-info .linkedin-icon:hover {
-  fill: #0666cb;
+  fill: var(--color-primary-dark);
   -webkit-transform: translateY(-0.2rem);
           transform: translateY(-0.2rem);
 }
 
 .header__nav-box .contact-info .github-icon:hover {
-  fill: var(--color-grey-light-1);
+  fill: var(--color-primary-dark);
   -webkit-transform: translateY(-0.3rem);
           transform: translateY(-0.3rem);
 }
@@ -234,6 +234,7 @@ body {
       -ms-flex-direction: column;
           flex-direction: column;
   margin: 0rem 5rem;
+  margin-bottom: 10rem;
 }
 
 .heading:after {
