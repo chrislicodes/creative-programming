@@ -62,28 +62,26 @@
     width: 100%;
     height: 100%;
     animation: pulse 5s 3s infinite;
-    box-shadow: 0 0 0 1.5em rgba(#fff, 0);
   }
 
   &:link,
   &:visited {
     text-transform: uppercase;
     text-decoration: none;
-    padding: 1.5rem 4rem; /* First value: Top and Bottom, Second value: sides, otherwise clockwise*/
+    padding: 1.5rem 4rem;
     border-radius: 0.25rem;
-    display: inline-block; /* Always set this if we want to set paddings and margins */
-    position: relative; /* Relative so we can set the pseudo element behind it */
+    display: inline-block;
+    position: relative;
     font-size: 1.6rem;
     box-shadow: inset 0 0 0 0 rgb(255, 110, 65);
     transition: box-shadow 0.3s, transform 0.1s;
   }
 
   &:hover {
-    // background-color: rgb(255, 110, 65);
     box-shadow: inset 25rem 0 0 0 rgb(255, 110, 65);
   }
 
   &:active {
-    transform: translateY(0.2rem);
+    transform: scale(1.05);
   }
 }
