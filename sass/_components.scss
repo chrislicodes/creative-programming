@@ -21,6 +21,9 @@
     &--sub {
       font-size: 3rem;
       font-weight: 400;
+      animation: fadeIn 0.5s 1.6s;
+      animation-fill-mode: backwards;
+      backface-visibility: hidden;
     }
   }
 
@@ -28,6 +31,9 @@
     text-transform: uppercase;
     font-size: 2rem;
     padding-top: 1rem;
+    animation: fadeIn 0.5s 1.6s;
+    animation-fill-mode: backwards;
+    backface-visibility: hidden;
 
     .author-name {
       color: var(--color-primary-light);

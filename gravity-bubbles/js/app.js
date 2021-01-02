@@ -10,7 +10,7 @@ import { randomIntFromInterval } from "./utils.js";
 const canvas = document.querySelector("canvas");
 
 //Setting the size of canvas
-canvas.width = window.innerWidth;
+canvas.width = document.body.clientWidth;
 canvas.height = window.innerHeight;
 
 //Adding context to add methods for drawing
@@ -100,8 +100,8 @@ if (isMobile) {
   mouseSquare = 100;
   maxRadius = 100;
   minRadius = 10;
-  dxFactor = 5;
-  dyFactor = 5;
+  dxFactor = 3;
+  dyFactor = 3;
 }
 
 // ------------------------------------------------------------
@@ -152,7 +152,9 @@ class Circle {
       this.dx = -this.dx;
 
       //change color to red while bouncing on x
-      this.color = "#FF5722";
+      this.color = `${getComputedStyle(
+        document.documentElement
+      ).getPropertyValue("--color-primary-light")}`;
     }
 
     //check for y bounce
