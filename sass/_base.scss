@@ -11,6 +11,11 @@
   --color-grey-dark-1: #999;
   --color-grey-dark-2: #777;
   --color-grey-dark-3: #333;
+
+  --main-animation-time: 1.25s;
+  --sub-animation-time: 0.5s;
+  --delay-animation: 0.2s;
+  --delay-animation-offset: 0.3s;
 }
 
 * {
@@ -42,4 +47,10 @@ body {
   font-weight: 400;
   line-height: 1.6;
   color: var(--color-grey-dark-2);
+}
+
+/* Defining the selection color */
+::selection {
+  color: var(--color-primary-dark);
+  background: var(--color-grey-dark-1);
 }
