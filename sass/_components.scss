@@ -16,6 +16,9 @@
     &--main {
       font-size: 7rem;
       color: var(--color-grey-light-1);
+      @include respond-phone {
+        margin-bottom: 2rem;
+      }
     }
 
     &--sub {
@@ -25,6 +28,9 @@
         calc(var(--delay-animation) + var(--main-animation-time));
       animation-fill-mode: backwards;
       backface-visibility: hidden;
+      @include respond-phone {
+        margin-bottom: 1rem;
+      }
     }
   }
 
@@ -74,11 +80,15 @@
     position: relative;
     font-size: 1.6rem;
     box-shadow: inset 0 0 0 0 rgb(255, 110, 65);
-    transition: box-shadow 0.3s, transform 0.1s;
+    transition: background-color 0.25s, transform 0.1s;
+    @include respond-tablet-portrait {
+      font-size: 2rem;
+      padding: 2rem 5rem;
+    }
   }
 
   &:hover {
-    box-shadow: inset 25rem 0 0 0 rgb(255, 110, 65);
+    background-color: rgb(255, 110, 65);
   }
 
   &:active {

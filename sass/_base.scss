@@ -38,11 +38,11 @@ html {
   }
 
   @include respond-tablet-portrait {
-    font-size: 50%;
+    font-size: 45%;
   }
 
-  @include respond-phone {
-    font-size: 45%;
+  @include respond-phone-effect {
+    font-size: 40%;
   }
 }
 

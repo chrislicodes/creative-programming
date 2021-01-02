@@ -3,13 +3,19 @@
 0 - 600px: Phone
 600 - 900px: Tablet Portrait
 900 - 1000px:
-100 - 1200px: Tablet landscape
+1000 - 1200px: Tablet landscape
 [1200 - 1800] - Developed
 1800px+ - Big Screen
 */
 
 @mixin respond-phone {
-  @media (max-width: 600px) {
+  @media (max-width: 660px) {
+    @content;
+  }
+}
+
+@mixin respond-phone-effect {
+  @media (max-width: 740px) {
     @content;
   }
 }

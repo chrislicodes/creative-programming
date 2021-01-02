@@ -101,7 +101,7 @@
     width: 55%;
     animation: expandLine var(--main-animation-time);
 
-    @include respond-tablet-portrait {
+    @include respond-phone {
       display: none;
     }
   }
@@ -118,12 +118,7 @@
     width: 55%;
     animation: expandLine var(--main-animation-time);
 
-    // @include respond-tablet-effect {
-    //   bottom: -15%;
-    //   right: -5%;
-    // }
-
-    @include respond-tablet-portrait {
+    @include respond-phone {
       display: none;
     }
   }

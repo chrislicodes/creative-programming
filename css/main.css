@@ -2,7 +2,7 @@
 0 - 600px: Phone
 600 - 900px: Tablet Portrait
 900 - 1000px:
-100 - 1200px: Tablet landscape
+1000 - 1200px: Tablet landscape
 [1200 - 1800] - Developed
 1800px+ - Big Screen
 */
@@ -128,13 +128,13 @@ html {
 
 @media (max-width: 900px) {
   html {
-    font-size: 50%;
+    font-size: 45%;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 740px) {
   html {
-    font-size: 45%;
+    font-size: 40%;
   }
 }
 
@@ -293,7 +293,7 @@ body {
           animation: expandLine var(--main-animation-time);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 660px) {
   .heading:after {
     display: none;
   }
@@ -313,7 +313,7 @@ body {
           animation: expandLine var(--main-animation-time);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 660px) {
   .heading:before {
     display: none;
   }
@@ -349,6 +349,12 @@ body {
   color: var(--color-grey-light-1);
 }
 
+@media (max-width: 660px) {
+  .heading-primary--main {
+    margin-bottom: 2rem;
+  }
+}
+
 .heading-primary--sub {
   font-size: 3rem;
   font-weight: 400;
@@ -358,6 +364,12 @@ body {
           animation-fill-mode: backwards;
   -webkit-backface-visibility: hidden;
           backface-visibility: hidden;
+}
+
+@media (max-width: 660px) {
+  .heading-primary--sub {
+    margin-bottom: 1rem;
+  }
 }
 
 .heading__author {
@@ -408,15 +420,21 @@ body {
   font-size: 1.6rem;
   -webkit-box-shadow: inset 0 0 0 0 #ff6e41;
           box-shadow: inset 0 0 0 0 #ff6e41;
-  -webkit-transition: -webkit-box-shadow 0.3s, -webkit-transform 0.1s;
-  transition: -webkit-box-shadow 0.3s, -webkit-transform 0.1s;
-  transition: box-shadow 0.3s, transform 0.1s;
-  transition: box-shadow 0.3s, transform 0.1s, -webkit-box-shadow 0.3s, -webkit-transform 0.1s;
+  -webkit-transition: background-color 0.25s, -webkit-transform 0.1s;
+  transition: background-color 0.25s, -webkit-transform 0.1s;
+  transition: background-color 0.25s, transform 0.1s;
+  transition: background-color 0.25s, transform 0.1s, -webkit-transform 0.1s;
+}
+
+@media (max-width: 900px) {
+  .btn:link, .btn:visited {
+    font-size: 2rem;
+    padding: 2rem 5rem;
+  }
 }
 
 .btn:hover {
-  -webkit-box-shadow: inset 25rem 0 0 0 #ff6e41;
-          box-shadow: inset 25rem 0 0 0 #ff6e41;
+  background-color: #ff6e41;
 }
 
 .btn:active {
