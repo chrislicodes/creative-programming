@@ -148,7 +148,7 @@ body {
           backface-visibility: hidden;
 }
 
-.header__nav-box .social-media {
+.header__nav-box .contact-info {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -160,17 +160,17 @@ body {
           justify-content: center;
 }
 
-.header__nav-box .social-media > * {
+.header__nav-box .contact-info > * {
   margin-left: 5rem;
 }
 
-.header__nav-box .social-media .linkedin-icon:hover {
+.header__nav-box .contact-info .linkedin-icon:hover {
   fill: #0666cb;
   -webkit-transform: translateY(-0.2rem);
           transform: translateY(-0.2rem);
 }
 
-.header__nav-box .social-media .github-icon:hover {
+.header__nav-box .contact-info .github-icon:hover {
   fill: var(--color-grey-light-1);
   -webkit-transform: translateY(-0.3rem);
           transform: translateY(-0.3rem);
