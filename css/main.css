@@ -96,10 +96,10 @@
   --color-grey-dark-1: #999;
   --color-grey-dark-2: #777;
   --color-grey-dark-3: #333;
-  --main-animation-time: 1.25s;
-  --sub-animation-time: 0.5s;
-  --delay-animation: 0.2s;
-  --delay-animation-offset: 0.3s;
+  --main-animation-time: 1.2s;
+  --sub-animation-time: 0.6s;
+  --delay-animation: 0.6s;
+  --delay-animation-offset: 0s;
 }
 
 * {
@@ -126,13 +126,13 @@ html {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px), (max-height: 620px) {
   html {
     font-size: 45%;
   }
 }
 
-@media (max-width: 740px) {
+@media (max-width: 740px), (max-height: 500px) {
   html {
     font-size: 40%;
   }
@@ -293,7 +293,7 @@ body {
           animation: expandLine var(--main-animation-time);
 }
 
-@media (max-width: 660px) {
+@media (max-width: 660px), (max-height: 500px) {
   .heading:after {
     display: none;
   }
@@ -313,7 +313,7 @@ body {
           animation: expandLine var(--main-animation-time);
 }
 
-@media (max-width: 660px) {
+@media (max-width: 660px), (max-height: 500px) {
   .heading:before {
     display: none;
   }
@@ -337,6 +337,15 @@ body {
   font-weight: 600;
   font-size: 2.5rem;
   color: var(--color-primary-light);
+  -webkit-animation: fadeIn 1s;
+          animation: fadeIn 1s;
+}
+
+.heading-primary {
+  -webkit-animation: fadeIn 2s 1s;
+          animation: fadeIn 2s 1s;
+  -webkit-animation-fill-mode: backwards;
+          animation-fill-mode: backwards;
 }
 
 .heading-primary--main, .heading-primary--sub {
@@ -349,7 +358,7 @@ body {
   color: var(--color-grey-light-1);
 }
 
-@media (max-width: 660px) {
+@media (max-width: 660px), (max-height: 500px) {
   .heading-primary--main {
     margin-bottom: 2rem;
   }
@@ -366,7 +375,7 @@ body {
           backface-visibility: hidden;
 }
 
-@media (max-width: 660px) {
+@media (max-width: 660px), (max-height: 500px) {
   .heading-primary--sub {
     margin-bottom: 1rem;
   }
@@ -416,7 +425,6 @@ body {
   padding: 1.5rem 4rem;
   border-radius: 0.25rem;
   display: inline-block;
-  position: relative;
   font-size: 1.6rem;
   -webkit-box-shadow: inset 0 0 0 0 #ff6e41;
           box-shadow: inset 0 0 0 0 #ff6e41;
@@ -426,7 +434,7 @@ body {
   transition: background-color 0.25s, transform 0.1s, -webkit-transform 0.1s;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px), (max-height: 620px) {
   .btn:link, .btn:visited {
     font-size: 2rem;
     padding: 2rem 5rem;

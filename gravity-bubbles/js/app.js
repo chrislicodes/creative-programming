@@ -87,13 +87,13 @@ let dxFactor;
 let dyFactor;
 
 if (isMobile) {
-  nCircles = 20;
+  nCircles = 30;
   growRate = 3;
   mouseSquare = 40;
-  maxRadius = 40;
+  maxRadius = 60;
   minRadius = 10;
-  dxFactor = 5;
-  dyFactor = 5;
+  dxFactor = 2;
+  dyFactor = 2;
 } else {
   nCircles = 100;
   growRate = 5;
