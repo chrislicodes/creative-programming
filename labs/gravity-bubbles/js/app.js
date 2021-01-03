@@ -1,6 +1,6 @@
 "use strict";
 
-import { randomIntFromInterval } from "./utils.js";
+import { randomIntFromInterval } from "../../utils.js";
 
 // ------------------------------------------------------------
 // ---- Canvas Setup
@@ -63,8 +63,8 @@ canvas.addEventListener("dblclick", function (e) {
   const y = e.y;
 
   activeCircles.forEach((circle) => {
-    circle.dx = (x - circle.x) * -0.1 * Math.random();
-    circle.dy = (y - circle.y) * -0.1 * Math.random();
+    circle.dx = (x - circle.x) * -0.08 * Math.random();
+    circle.dy = (y - circle.y) * -0.08 * Math.random();
   });
 });
 
@@ -115,7 +115,7 @@ class Circle {
   type = "circle";
 
   //prettier-ignore
-  constructor(x = window.innerWidth / 2, y = window.innerHeight / 2, dx = 1, dy = 1, radius = 50, color = "#303841") {
+  constructor(x = canvas.width / 2, y = canvas.height / 2, dx = 1, dy = 1, radius = 50, color = "#303841") {
     //x and change in x
     this.x = x;
     this.dx = dx;
@@ -126,10 +126,10 @@ class Circle {
 
     //circle properties
     this.radius = radius;
+    this.minRadius = this.radius / 2;
     this.color = color;
 
-    this.minRadius = this.radius / 2;
-    
+    //add the reference value to the active objects
     activeCircles.push(this);
 }
 
@@ -148,20 +148,20 @@ class Circle {
 
   update() {
     //check for x bounce
-    if (this.x + this.radius > window.innerWidth || this.x - this.radius < 0) {
+    if (this.x + this.radius >= canvas.width || this.x - this.radius <= 0) {
       this.dx = -this.dx;
 
-      //change color to red while bouncing on x
+      //change color to current primary color of index.html
       this.color = `${getComputedStyle(
         document.documentElement
       ).getPropertyValue("--color-primary-light")}`;
     }
 
     //check for y bounce
-    if (this.y + this.radius > window.innerHeight || this.y - this.radius < 0) {
+    if (this.y + this.radius >= canvas.height || this.y - this.radius <= 0) {
       this.dy = -this.dy;
 
-      //change color to green while bouncing on y
+      //change color while bouncing on y
       this.color = "#EEEEEE";
     }
 
@@ -170,7 +170,6 @@ class Circle {
     this.y += this.dy;
 
     //interactivity
-
     //Get distance from the circle to the mouse
     if (
       mouse.x - this.x < mouseSquare &&
@@ -178,11 +177,15 @@ class Circle {
       mouse.y - this.y < mouseSquare &&
       mouse.y - this.y > -mouseSquare
     ) {
+      //only grow up to the maxRadius
       if (this.radius < maxRadius) {
         this.radius += growRate;
       }
 
+      //change the color to inital color if hovered
       this.color = "#303841";
+
+      //grow back to minRadius
     } else if (this.radius > this.minRadius) {
       this.radius -= growRate / 1.25;
     }
@@ -201,11 +204,12 @@ for (const i in [...Array(nCircles)]) {
   //random values
   let radius = randomIntFromInterval(minRadius, maxRadius); //circle radius
 
-  let x = Math.random() * (window.innerWidth - radius * 2) + radius; //x coordinate
-  let y = Math.random() * (window.innerHeight - radius * 2) + radius; //y coordinate
+  let x = Math.random() * (canvas.width - radius * 2) + radius; //x coordinate
+  let y = Math.random() * (canvas.height - radius * 2) + radius; //y coordinate
 
   let dx = (Math.random() - 0.5) * dxFactor; //change in x
   let dy = (Math.random() - 0.5) * dyFactor; //change in y
+
   new Circle(x, y, dx, dy, radius);
 }
 
@@ -214,10 +218,13 @@ const animateCircle = function () {
   requestAnimationFrame(animateCircle); //animation works by "refreshing" the page a certain amount of time -> fps
   c.clearRect(0, 0, innerWidth, innerHeight); //clearing the entire canvas
 
+  //update every circle on the screen
   activeCircles.forEach((circle) => {
     circle.update();
   });
 };
+
+//TODO: GUI
 
 //Starting the animation
 animateCircle();

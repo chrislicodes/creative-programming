@@ -31,7 +31,7 @@
   0% {
     opacity: 1;
   }
-  100% {
+  50% {
     opacity: 0.97;
   }
 }
@@ -40,7 +40,7 @@
   0% {
     opacity: 1;
   }
-  100% {
+  50% {
     opacity: 0.97;
   }
 }
@@ -159,6 +159,13 @@ body {
   position: relative;
   height: 100vh;
   width: 100%;
+}
+
+.header__wrapper {
+  height: 100%;
+  width: 100%;
+  -webkit-transition: opacity 0.75s;
+  transition: opacity 0.75s;
 }
 
 .header__logo {
