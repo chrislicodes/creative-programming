@@ -1,6 +1,6 @@
 "use strict";
 
-import { randomIntFromInterval } from "../../utils.js";
+import { randomIntFromInterval, Vector2D } from "../../utils.js";
 
 // ------------------------------------------------------------
 // ---- Canvas Setup
@@ -20,12 +20,11 @@ const c = canvas.getContext("2d");
 // ---- Tracking Events
 // ------------------------------------------------------------
 
-const mouse = {
-  x: undefined,
-  y: undefined,
-};
+const mouse = new Vector2D(0, 0);
 
 //add Eventlisteners
+
+//Updating the mouse position
 ["mousemove", "touchmove"].forEach((event) => {
   canvas.addEventListener(event, function (e) {
     mouse.x = e.x;
@@ -33,6 +32,7 @@ const mouse = {
   });
 });
 
+//Clear mouse position if pointer is not pointing on the canvas
 ["mouseleave", "touchleave"].forEach((event) => {
   canvas.addEventListener(event, function (e) {
     mouse.x = undefined;
@@ -40,31 +40,36 @@ const mouse = {
   });
 });
 
+//Changing the canvas size when the user resizes it
 window.addEventListener("resize", function () {
   canvas.width = document.body.clientWidth;
   canvas.height = document.body.clientHeight;
 });
 
+//Attract all balls to the pointer
 canvas.addEventListener("click", function (e) {
-  //getting coordinates
+  //getting coordinates of the click
   const x = e.x;
   const y = e.y;
 
-  //all circles should arrive at the same time
-  activeCircles.forEach((circle) => {
-    circle.dx = (x - circle.x) * 0.01;
-    circle.dy = (y - circle.y) * 0.01;
+  //update movement directions of all balls, so that all balls arrive at the same time
+  activeBalls.forEach((ball) => {
+    ball.dx = (x - ball.x) * 0.01;
+    ball.dy = (y - ball.y) * 0.01;
   });
 });
 
+//Repel all points from the pointer, the closer balls faster than the ones that are further away
 canvas.addEventListener("dblclick", function (e) {
-  //getting coordinates
+  //getting coordinates of double click
   const x = e.x;
   const y = e.y;
 
-  activeCircles.forEach((circle) => {
-    circle.dx = (x - circle.x) * -0.08 * Math.random();
-    circle.dy = (y - circle.y) * -0.08 * Math.random();
+  //update movement directions of all balls, so that all balls are getting repelled away from the pointer
+  activeBalls.forEach((ball) => {
+    let length = Math.sqrt((x - ball.x) ** 2 + (y - ball.y) ** 2);
+    ball.dx = (x - ball.x) * -0.08 * Math.random();
+    ball.dy = (y - ball.y) * -0.08 * Math.random();
   });
 });
 
@@ -77,8 +82,8 @@ const isMobile =
   Math.min(window.screen.width, window.screen.height) < 768 ||
   navigator.userAgent.indexOf("Mobi") > -1;
 
-//number of circles
-let nCircles;
+//number of balls
+let nBalls;
 let growRate; //px;
 let mouseSquare; //px
 let maxRadius; //px
@@ -87,7 +92,7 @@ let dxFactor;
 let dyFactor;
 
 if (isMobile) {
-  nCircles = 30;
+  nBalls = 30;
   growRate = 3;
   mouseSquare = 40;
   maxRadius = 60;
@@ -95,7 +100,7 @@ if (isMobile) {
   dxFactor = 2;
   dyFactor = 2;
 } else {
-  nCircles = 100;
+  nBalls = 100;
   growRate = 5;
   mouseSquare = 100;
   maxRadius = 100;
@@ -105,14 +110,14 @@ if (isMobile) {
 }
 
 // ------------------------------------------------------------
-// ---- Circle Class
+// ---- Ball Class
 // ------------------------------------------------------------
 
-//tracking all active circles
-const activeCircles = [];
+//tracking all active balls
+const activeBalls = [];
 
-class Circle {
-  type = "circle";
+class Ball {
+  type = "ball";
 
   //prettier-ignore
   constructor(x = canvas.width / 2, y = canvas.height / 2, dx = 1, dy = 1, radius = 50, color = "#303841") {
@@ -124,13 +129,13 @@ class Circle {
     this.y = y;
     this.dy = dy;
 
-    //circle properties
+    //ball properties
     this.radius = radius;
     this.minRadius = this.radius / 2;
     this.color = color;
 
     //add the reference value to the active objects
-    activeCircles.push(this);
+    activeBalls.push(this);
 }
 
   draw() {
@@ -139,7 +144,7 @@ class Circle {
     c.lineWidth = 6;
     c.fillStyle = this.color;
 
-    //draw the circle
+    //draw the ball
     c.beginPath(); //beginning a new path
     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false); //creating the outline
     c.stroke();
@@ -170,7 +175,7 @@ class Circle {
     this.y += this.dy;
 
     //interactivity
-    //Get distance from the circle to the mouse
+    //Get distance from the ball to the mouse
     if (
       mouse.x - this.x < mouseSquare &&
       mouse.x - this.x > -mouseSquare &&
@@ -190,7 +195,7 @@ class Circle {
       this.radius -= growRate / 1.25;
     }
 
-    //Draw new circle
+    //Draw new ball
     this.draw();
   }
 }
@@ -199,10 +204,10 @@ class Circle {
 // ---- Animation
 // ------------------------------------------------------------
 
-//creating n Circles
-for (const i in [...Array(nCircles)]) {
+//creating n Balls
+for (const i in [...Array(nBalls)]) {
   //random values
-  let radius = randomIntFromInterval(minRadius, maxRadius); //circle radius
+  let radius = randomIntFromInterval(minRadius, maxRadius); //ball radius
 
   let x = Math.random() * (canvas.width - radius * 2) + radius; //x coordinate
   let y = Math.random() * (canvas.height - radius * 2) + radius; //y coordinate
@@ -210,21 +215,21 @@ for (const i in [...Array(nCircles)]) {
   let dx = (Math.random() - 0.5) * dxFactor; //change in x
   let dy = (Math.random() - 0.5) * dyFactor; //change in y
 
-  new Circle(x, y, dx, dy, radius);
+  new Ball(x, y, dx, dy, radius);
 }
 
 //animation loop
-const animateCircle = function () {
-  requestAnimationFrame(animateCircle); //animation works by "refreshing" the page a certain amount of time -> fps
+const animateBall = function () {
+  requestAnimationFrame(animateBall); //animation works by "refreshing" the page a certain amount of time -> fps
   c.clearRect(0, 0, innerWidth, innerHeight); //clearing the entire canvas
 
-  //update every circle on the screen
-  activeCircles.forEach((circle) => {
-    circle.update();
+  //update every ball on the screen
+  activeBalls.forEach((ball) => {
+    ball.update();
   });
 };
 
 //TODO: GUI
 
 //Starting the animation
-animateCircle();
+animateBall();
