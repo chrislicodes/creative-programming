@@ -12,8 +12,18 @@ const btn = document
   .getElementById("start-exploring")
   .addEventListener("click", removeWrapper);
 
-const devMode = 1;
+let behindTheScenes = false;
 
-if (devMode) {
+["hashchange", "load"].forEach((event) => {
+  window.addEventListener(event, function () {
+    if (location.hash === "#dev") {
+      behindTheScenes = true;
+    } else {
+      behindTheScenes = false;
+    }
+  });
+});
+
+if (behindTheScenes) {
   removeWrapper();
 }
