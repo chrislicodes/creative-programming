@@ -33,8 +33,18 @@ let maxRadius; //px
 let minRadius; //px;
 let dxFactor;
 let dyFactor;
-let nX;
 let squareSize;
+let behindTheScenes = false;
+
+["hashchange", "load"].forEach((event) => {
+  window.addEventListener(event, function () {
+    if (location.hash === "#dev") {
+      behindTheScenes = true;
+    } else {
+      behindTheScenes = false;
+    }
+  });
+});
 
 if (isMobile) {
   nBalls = 30;
@@ -44,7 +54,6 @@ if (isMobile) {
   minRadius = 10;
   dxFactor = 2;
   dyFactor = 2;
-  nX = 5;
   squareSize = 150;
 } else {
   nBalls = 100;
@@ -54,7 +63,6 @@ if (isMobile) {
   minRadius = 10;
   dxFactor = 3;
   dyFactor = 3;
-  nX = 10; //grid - size
   squareSize = 200;
 }
 
@@ -134,6 +142,7 @@ class Ball {
     //check for y bounce
     if (this.loc.y + this.radius >= canvas.height) {
       this.veloc.y = -Math.abs(this.veloc.y);
+
       //meh, not DRY
       this.color = "#EEEEEE";
     } else if (this.loc.y - this.radius <= 0) {
@@ -144,8 +153,7 @@ class Ball {
     }
 
     //Update position
-    this.loc.x += this.veloc.x;
-    this.loc.y += this.veloc.y;
+    this.loc.addVec(this.veloc);
 
     //interactivity
     //Get distance from the ball to the mouse
@@ -155,7 +163,7 @@ class Ball {
       mouse.y - this.loc.y < mouseEffectArea &&
       mouse.y - this.loc.y > -mouseEffectArea
     ) {
-      //only grow up to the maxRadius
+      //only increase size up to the maxRadius
       if (this.radius < maxRadius) {
         this.radius += growRate;
       }
@@ -163,14 +171,17 @@ class Ball {
       //change the color to inital color if hovered
       this.color = "#303841";
 
-      //grow back to minRadius
+      //decrease size to minRadius
     } else if (this.radius > this.minRadius) {
       this.radius -= growRate / 1.25;
     }
 
     //Draw new ball
     this.draw();
-    this.drawDirection();
+
+    if (behindTheScenes) {
+      this.drawDirection();
+    }
   }
 }
 
@@ -178,7 +189,8 @@ class Ball {
 // ---- Tracking Events
 // ------------------------------------------------------------
 
-const mouse = new Vector2D(0, 0);
+//Init mouse outside to avoid effect on starting screen
+const mouse = new Vector2D(-1000, -1000);
 
 c.font = "700 20px Arial";
 c.textBaseline = "middle";
@@ -225,11 +237,30 @@ canvas.addEventListener("dblclick", function (e) {
   const x = e.x;
   const y = e.y;
 
+  //close balls should rerceive a stronger impulse then far away ones
+  //it could work with 1/x or normalize all the vectors and use -x^2 + 1 or just -x + 1
+  //however, google was not very helpful or I didn't searched for the right keyword, so if someone happens to read this and knows something better:
+  //let me know pls
+
   //update movement directions of all balls, so that all balls are getting repelled away from the pointer
+  const longestDiag = Math.sqrt(canvas.width ** 2 + canvas.height ** 2);
+  const testFunc = (x) => -x + 1; //(-x) ** 2 + 1; //-x + 1;
+
   activeBalls.forEach((ball) => {
-    let length = Math.sqrt((x - ball.x) ** 2 + (y - ball.y) ** 2);
-    ball.veloc.x = (x - ball.loc.x) * -0.08 * Math.random();
-    ball.veloc.y = (y - ball.loc.y) * -0.08 * Math.random();
+    //get standardized distance
+    let distanceToClick = Math.sqrt(
+      (x - ball.loc.x) ** 2 + (y - ball.loc.y) ** 2
+    );
+    let distNorm = distanceToClick / longestDiag; // / longestDiag;
+
+    //plug it in a function where y gets smaller if x gets bigger
+    let scale = testFunc(distNorm) * 12;
+
+    ball.veloc = new Vector2D(mouse.x, mouse.y)
+      .subVec(ball.loc) //getting direction to mouse
+      .normalize() //normalize all vectors to length 1
+      .invert() //invert the direction
+      .scaleMult(scale); //scale
   });
 });
 
@@ -242,6 +273,7 @@ for (const i in [...Array(nBalls)]) {
   //random values
   let radius = randomIntFromInterval(minRadius, maxRadius); //ball radius
 
+  //spawn inside the canvas
   let x = Math.random() * (canvas.width - radius * 2) + radius; //x coordinate
   let y = Math.random() * (canvas.height - radius * 2) + radius; //y coordinate
 
@@ -255,13 +287,16 @@ for (const i in [...Array(nBalls)]) {
 const animateBall = function () {
   requestAnimationFrame(animateBall); //animation works by "refreshing" the page a certain amount of time -> fps
   c.clearRect(0, 0, innerWidth, innerHeight); //clearing the entire canvas
-  drawGrid(canvas, c, squareSize);
+
+  if (behindTheScenes) {
+    drawGrid(canvas, c, squareSize);
+    drawMousePosition(c, mouse, mouseEffectArea);
+  }
+
   //update every ball on the screen
   activeBalls.forEach((ball) => {
     ball.update();
   });
-
-  drawMousePosition(c, mouse, mouseEffectArea);
 };
 
 //TODO: GUI

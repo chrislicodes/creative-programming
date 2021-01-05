@@ -14,6 +14,13 @@ export class Vector2D {
     return this;
   }
 
+  subVec(vec) {
+    this.x -= vec.x;
+    this.y -= vec.y;
+
+    return this;
+  }
+
   scaleMult(scale) {
     this.x *= scale;
     this.y *= scale;
@@ -29,8 +36,8 @@ export class Vector2D {
   }
 
   invert(x = true, y = true) {
-    if (x) x *= -1;
-    if (y) y *= -1;
+    if (x) this.x *= -1;
+    if (y) this.y *= -1;
 
     //Chainable
     return this;
