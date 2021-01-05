@@ -1,6 +1,6 @@
 "use strict";
 //prettier-ignore
-import { randomIntFromInterval, Vector2D, addVectors, normalizeVector} from "../../utils.js";
+import { randomIntFromInterval, Vector2D, addVectors, drawGrid, drawMousePosition} from "../../utils.js";
 
 // ------------------------------------------------------------
 // ---- Canvas Setup
@@ -28,7 +28,7 @@ const isMobile =
 //number of balls
 let nBalls;
 let growRate; //px;
-let mouseSquare; //px
+let mouseEffectArea; //px
 let maxRadius; //px
 let minRadius; //px;
 let dxFactor;
@@ -39,7 +39,7 @@ let squareSize;
 if (isMobile) {
   nBalls = 30;
   growRate = 3;
-  mouseSquare = 40;
+  mouseEffectArea = 40;
   maxRadius = 60;
   minRadius = 10;
   dxFactor = 2;
@@ -49,7 +49,7 @@ if (isMobile) {
 } else {
   nBalls = 100;
   growRate = 5;
-  mouseSquare = 100;
+  mouseEffectArea = 100;
   maxRadius = 100;
   minRadius = 10;
   dxFactor = 3;
@@ -115,26 +115,31 @@ class Ball {
 
   update() {
     //check for x bounce
-    if (
-      this.loc.x + this.radius >= canvas.width ||
-      this.loc.x - this.radius <= 0
-    ) {
-      this.veloc.x = -this.veloc.x;
+    if (this.loc.x + this.radius >= canvas.width) {
+      this.veloc.x = this.veloc.x = -Math.abs(this.veloc.x);
 
-      //change color to current primary color of index.html
+      //meh, not DRY
+      this.color = `${getComputedStyle(
+        document.documentElement
+      ).getPropertyValue("--color-primary-light")}`;
+    } else if (this.loc.x - this.radius <= 0) {
+      this.veloc.x = Math.abs(this.veloc.x);
+
+      //meh, not DRY
       this.color = `${getComputedStyle(
         document.documentElement
       ).getPropertyValue("--color-primary-light")}`;
     }
 
     //check for y bounce
-    if (
-      this.loc.y + this.radius >= canvas.height ||
-      this.loc.y - this.radius <= 0
-    ) {
-      this.veloc.y = -this.veloc.y;
+    if (this.loc.y + this.radius >= canvas.height) {
+      this.veloc.y = -Math.abs(this.veloc.y);
+      //meh, not DRY
+      this.color = "#EEEEEE";
+    } else if (this.loc.y - this.radius <= 0) {
+      this.veloc.y = Math.abs(this.veloc.y);
 
-      //change color while bouncing on y
+      //meh, not DRY
       this.color = "#EEEEEE";
     }
 
@@ -145,10 +150,10 @@ class Ball {
     //interactivity
     //Get distance from the ball to the mouse
     if (
-      mouse.x - this.loc.x < mouseSquare &&
-      mouse.x - this.loc.x > -mouseSquare &&
-      mouse.y - this.loc.y < mouseSquare &&
-      mouse.y - this.loc.y > -mouseSquare
+      mouse.x - this.loc.x < mouseEffectArea &&
+      mouse.x - this.loc.x > -mouseEffectArea &&
+      mouse.y - this.loc.y < mouseEffectArea &&
+      mouse.y - this.loc.y > -mouseEffectArea
     ) {
       //only grow up to the maxRadius
       if (this.radius < maxRadius) {
@@ -177,25 +182,6 @@ const mouse = new Vector2D(0, 0);
 
 c.font = "700 20px Arial";
 c.textBaseline = "middle";
-
-const drawMousePosition = function () {
-  c.beginPath();
-  c.arc(mouse.x, mouse.y, 3, 0, 2 * Math.PI, false);
-  c.closePath();
-  c.fill();
-  c.fillStyle = "#0095ff";
-  const text = "(" + mouse.x + ", " + mouse.y + ")";
-  c.fillText(text, mouse.x + 5, mouse.y);
-
-  //setting the color
-  c.strokeStyle = "black";
-  c.lineWidth = 4;
-
-  //draw the ball
-  c.beginPath(); //beginning a new path
-  c.arc(mouse.x, mouse.y, mouseSquare, 0, Math.PI * 2, false); //creating the outline
-  c.stroke();
-};
 
 //add Eventlisteners
 //Updating the mouse position
@@ -251,35 +237,6 @@ canvas.addEventListener("dblclick", function (e) {
 // ---- Animation
 // ------------------------------------------------------------
 
-//Credit: https://xon5.medium.com/flexible-canvas-grid-without-blurred-lines-907fcadf5bfc
-const drawGrid = function () {
-  let ctx = c;
-
-  let s = squareSize; // defined in config
-  let nX = Math.floor(canvas.width / s) - 2;
-  let nY = Math.floor(canvas.height / s) - 2;
-  let pX = canvas.width - nX * s;
-  let pY = canvas.height - nY * s;
-
-  let pL = 0; //Math.ceil(pX / 2) - 0.5;
-  let pT = 0; //Math.ceil(pY / 2) - 0.5;
-  let pR = 0; //canvas.width - nX * s - pL;
-  let pB = 0; //canvas.height - nY * s - pT;
-
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = "#5c5c5c";
-  ctx.beginPath();
-  for (var x = pL; x <= canvas.width - pR; x += s) {
-    ctx.moveTo(x, pT);
-    ctx.lineTo(x, canvas.height - pB);
-  }
-  for (var y = pT; y <= canvas.height - pB; y += s) {
-    ctx.moveTo(pL, y);
-    ctx.lineTo(canvas.width - pR, y);
-  }
-  ctx.stroke();
-};
-
 //creating n Balls
 for (const i in [...Array(nBalls)]) {
   //random values
@@ -298,13 +255,13 @@ for (const i in [...Array(nBalls)]) {
 const animateBall = function () {
   requestAnimationFrame(animateBall); //animation works by "refreshing" the page a certain amount of time -> fps
   c.clearRect(0, 0, innerWidth, innerHeight); //clearing the entire canvas
-  drawGrid();
+  drawGrid(canvas, c, squareSize);
   //update every ball on the screen
   activeBalls.forEach((ball) => {
     ball.update();
   });
 
-  drawMousePosition();
+  drawMousePosition(c, mouse, mouseEffectArea);
 };
 
 //TODO: GUI
