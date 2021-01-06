@@ -14,7 +14,6 @@ const btn = document
 
 ["hashchange", "load"].forEach((event) => {
   window.addEventListener(event, function () {
-    console.log("TRIGGER");
     if (location.hash === "#dev") {
       removeWrapper();
     }
