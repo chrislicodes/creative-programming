@@ -30,6 +30,7 @@
   }
 }
 
+//Trickery to simulate a pause between each animation
 @keyframes pulse {
   0% {
     box-shadow: 0 0 0 0 var(--color-primary-dark);

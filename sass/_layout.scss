@@ -139,7 +139,3 @@
     animation-fill-mode: backwards; /* Applies the 0% styles before the animation starts, because otherwise the button would be visible before because of the delay*/
   }
 }
-
-.hidden {
-  display: none;
-}

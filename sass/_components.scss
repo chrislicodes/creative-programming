@@ -1,19 +1,19 @@
 .heading {
+  text-transform: uppercase;
+
   &__intro {
-    text-transform: uppercase;
     font-weight: 600;
     font-size: 2.5rem;
     color: var(--color-primary-light);
     animation: fadeIn 1s;
   }
 
-  &-primary {
-    animation: fadeIn 2s 1s;
+  &__primary {
+    animation: fadeIn 1.5s 1s;
     animation-fill-mode: backwards;
     &--main,
     &--sub {
       display: block;
-      text-transform: uppercase;
     }
 
     &--main {
@@ -38,7 +38,6 @@
   }
 
   &__author {
-    text-transform: uppercase;
     font-size: 2rem;
     padding-top: 1rem;
     animation: fadeIn var(--sub-animation-time)
@@ -75,13 +74,11 @@
 
   &:link,
   &:visited {
-    text-transform: uppercase;
     text-decoration: none;
     padding: 1.5rem 4rem;
     border-radius: 0.25rem;
     display: inline-block;
     font-size: 1.6rem;
-    box-shadow: inset 0 0 0 0 rgb(255, 110, 65);
     transition: background-color 0.25s, transform 0.1s;
     @include respond-tablet-portrait {
       font-size: 2rem;

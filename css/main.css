@@ -96,7 +96,7 @@
   --color-grey-dark-1: #999;
   --color-grey-dark-2: #777;
   --color-grey-dark-3: #333;
-  --main-animation-time: 1.2s;
+  --main-animation-time: 1.3s;
   --sub-animation-time: 0.6s;
   --delay-animation: 0.6s;
   --delay-animation-offset: 0s;
@@ -335,12 +335,11 @@ body {
   /* Applies the 0% styles before the animation starts, because otherwise the button would be visible before because of the delay*/
 }
 
-.hidden {
-  display: none;
+.heading {
+  text-transform: uppercase;
 }
 
 .heading__intro {
-  text-transform: uppercase;
   font-weight: 600;
   font-size: 2.5rem;
   color: var(--color-primary-light);
@@ -348,30 +347,29 @@ body {
           animation: fadeIn 1s;
 }
 
-.heading-primary {
-  -webkit-animation: fadeIn 2s 1s;
-          animation: fadeIn 2s 1s;
+.heading__primary {
+  -webkit-animation: fadeIn 1.5s 1s;
+          animation: fadeIn 1.5s 1s;
   -webkit-animation-fill-mode: backwards;
           animation-fill-mode: backwards;
 }
 
-.heading-primary--main, .heading-primary--sub {
+.heading__primary--main, .heading__primary--sub {
   display: block;
-  text-transform: uppercase;
 }
 
-.heading-primary--main {
+.heading__primary--main {
   font-size: 7rem;
   color: var(--color-grey-light-1);
 }
 
 @media (max-width: 660px), (max-height: 500px) {
-  .heading-primary--main {
+  .heading__primary--main {
     margin-bottom: 2rem;
   }
 }
 
-.heading-primary--sub {
+.heading__primary--sub {
   font-size: 3rem;
   font-weight: 400;
   -webkit-animation: fadeIn var(--sub-animation-time) calc(var(--delay-animation) + var(--main-animation-time));
@@ -383,13 +381,12 @@ body {
 }
 
 @media (max-width: 660px), (max-height: 500px) {
-  .heading-primary--sub {
+  .heading__primary--sub {
     margin-bottom: 1rem;
   }
 }
 
 .heading__author {
-  text-transform: uppercase;
   font-size: 2rem;
   padding-top: 1rem;
   -webkit-animation: fadeIn var(--sub-animation-time) calc(var(--delay-animation) + var(--main-animation-time));
@@ -427,14 +424,11 @@ body {
 }
 
 .btn:link, .btn:visited {
-  text-transform: uppercase;
   text-decoration: none;
   padding: 1.5rem 4rem;
   border-radius: 0.25rem;
   display: inline-block;
   font-size: 1.6rem;
-  -webkit-box-shadow: inset 0 0 0 0 #ff6e41;
-          box-shadow: inset 0 0 0 0 #ff6e41;
   -webkit-transition: background-color 0.25s, -webkit-transform 0.1s;
   transition: background-color 0.25s, -webkit-transform 0.1s;
   transition: background-color 0.25s, transform 0.1s;
