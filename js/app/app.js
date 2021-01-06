@@ -12,18 +12,11 @@ const btn = document
   .getElementById("start-exploring")
   .addEventListener("click", removeWrapper);
 
-let behindTheScenes = false;
-
 ["hashchange", "load"].forEach((event) => {
   window.addEventListener(event, function () {
+    console.log("TRIGGER");
     if (location.hash === "#dev") {
-      behindTheScenes = true;
-    } else {
-      behindTheScenes = false;
+      removeWrapper();
     }
   });
 });
-
-if (behindTheScenes) {
-  removeWrapper();
-}
