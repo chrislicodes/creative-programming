@@ -1,6 +1,7 @@
 "use strict";
 //prettier-ignore
 import { Vector2D, drawGrid, drawMousePosition} from "../../utils.js";
+import Boid from "./Boid.js";
 
 // ------------------------------------------------------------
 // ---- Standard Setup
@@ -9,8 +10,11 @@ import { Vector2D, drawGrid, drawMousePosition} from "../../utils.js";
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
-canvas.width = document.body.clientWidth;
-canvas.height = document.body.clientHeight;
+export let width = document.body.clientWidth;
+export let height = document.body.clientHeight;
+
+canvas.width = width;
+canvas.height = height;
 
 const isMobile =
   Math.min(window.screen.width, window.screen.height) < 768 ||
@@ -65,36 +69,16 @@ addEventListener("resize", () => {
   init();
 });
 
-// Objects
-class Object {
-  constructor(x, y, radius, color) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-  }
+// ------------------------------------------------------------
+// ---- Implementation
+// ------------------------------------------------------------
+let flock = [];
 
-  draw() {
-    c.beginPath();
-    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    c.fillStyle = this.color;
-    c.fill();
-    c.closePath();
-  }
-
-  update() {
-    this.draw();
-  }
-}
-
-// Implementation
-let objects;
 function init() {
-  objects = [];
-
-  for (let i = 0; i < 400; i++) {
-    // objects.push()
+  for (let i = 0; i < 200; i++) {
+    flock.push(new Boid());
   }
+  console.log(flock);
 }
 
 // Animation Loop
@@ -107,9 +91,12 @@ function animate() {
     drawMousePosition(c, mouse, mouseEffectArea);
   }
 
-  // objects.forEach(object => {
-  //  object.update()
-  // })
+  flock.forEach((boid) => {
+    boid.update();
+    boid.bound();
+    boid.flock(flock);
+    boid.show(c);
+  });
 }
 
 init();

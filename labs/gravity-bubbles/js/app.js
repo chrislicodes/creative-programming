@@ -1,6 +1,6 @@
 "use strict";
 //prettier-ignore
-import { randomIntFromInterval, Vector2D, addVectors, drawGrid, drawMousePosition} from "../../utils.js";
+import { randomInt, Vector2D, addVectors, drawGrid, drawMousePosition} from "../../utils.js";
 
 // ------------------------------------------------------------
 // ---- Canvas Setup
@@ -271,7 +271,7 @@ canvas.addEventListener("dblclick", function (e) {
 //creating n Balls
 for (const i in [...Array(nBalls)]) {
   //random values
-  let radius = randomIntFromInterval(minRadius, maxRadius); //ball radius
+  let radius = randomInt(minRadius, maxRadius); //ball radius
 
   //spawn inside the canvas
   let x = Math.random() * (canvas.width - radius * 2) + radius; //x coordinate

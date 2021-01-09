@@ -7,11 +7,37 @@ export class Vector2D {
     this.y = y || 0;
   }
 
+  static randomVec(min, max) {
+    let x = randomFloat(min, max);
+    let y = randomFloat(min, max);
+
+    return new Vector2D(x, y);
+  }
+
   addVec(vec) {
     this.x += vec.x;
     this.y += vec.y;
 
     return this;
+  }
+
+  getDistanceVec(vec) {
+    let xDist = vec.pos.x - this.x;
+    let yDist = vec.pos.y - this.y;
+
+    return new Vector2D(xDist, yDist);
+  }
+
+  calcDistance(vec) {
+    let xDist = vec.pos.x - this.x;
+    let yDist = vec.pos.y - this.y;
+
+    return new Vector2D(xDist, yDist).getMagnitude();
+  }
+
+  divideBy(scale) {
+    this.x /= scale;
+    this.y /= scale;
   }
 
   subVec(vec) {
@@ -54,6 +80,20 @@ export class Vector2D {
   //needs to be called everytime we change call the other methods
   getMagnitude() {
     return Math.sqrt(this.x ** 2 + this.y ** 2);
+  }
+
+  setMagnitude(magn) {
+    this.normalize().scaleMult(magn);
+  }
+
+  limit(max, factor) {
+    if (Math.abs(this.x) > max) {
+      this.x *= factor;
+    }
+    if (Math.abs(this.y) > max) {
+      this.y *= factor;
+    }
+    return this;
   }
 }
 
@@ -110,10 +150,14 @@ export const drawMousePosition = function (c, mouse, effectArea) {
 // ------------------------------------------------------------
 
 //generates an inclusive random number
-export const randomIntFromInterval = function (min, max) {
+export const randomInt = function (min, max) {
   // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
+
+export function randomFloat(min, max) {
+  return min + Math.random() * (max - min);
+}
 
 export const addVectors = function (vec1, vec2) {
   return new Vector2D(vec1.x + vec2.x, vec1.y + vec2.y);
