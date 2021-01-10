@@ -2,42 +2,26 @@
 // ---- Vector Class - will be improved as needed
 // ------------------------------------------------------------
 export class Vector2D {
-  constructor(x, y) {
-    this.x = x || 0;
-    this.y = y || 0;
+  //Init
+  constructor(x = 0, y = 0) {
+    this.x = x;
+    this.y = y;
   }
 
-  static randomVec(min, max) {
+  //Static Methods
+  static randomVec(min = -1, max = 1) {
     let x = randomFloat(min, max);
     let y = randomFloat(min, max);
 
     return new Vector2D(x, y);
   }
 
+  //Operations
   addVec(vec) {
     this.x += vec.x;
     this.y += vec.y;
 
     return this;
-  }
-
-  getDistanceVec(vec) {
-    let xDist = vec.pos.x - this.x;
-    let yDist = vec.pos.y - this.y;
-
-    return new Vector2D(xDist, yDist);
-  }
-
-  calcDistance(vec) {
-    let xDist = vec.pos.x - this.x;
-    let yDist = vec.pos.y - this.y;
-
-    return new Vector2D(xDist, yDist).getMagnitude();
-  }
-
-  divideBy(scale) {
-    this.x /= scale;
-    this.y /= scale;
   }
 
   subVec(vec) {
@@ -61,6 +45,13 @@ export class Vector2D {
     return this;
   }
 
+  divideBy(scale) {
+    this.x /= scale;
+    this.y /= scale;
+
+    return this;
+  }
+
   invert(x = true, y = true) {
     if (x) this.x *= -1;
     if (y) this.y *= -1;
@@ -77,13 +68,10 @@ export class Vector2D {
     return this;
   }
 
-  //needs to be called everytime we change call the other methods
-  getMagnitude() {
-    return Math.sqrt(this.x ** 2 + this.y ** 2);
-  }
-
   setMagnitude(magn) {
     this.normalize().scaleMult(magn);
+
+    return this;
   }
 
   limit(max, factor) {
@@ -94,6 +82,33 @@ export class Vector2D {
       this.y *= factor;
     }
     return this;
+  }
+
+  limitMagnitude(max) {
+    let curMagn = this.getMagnitude();
+    if (curMagn > max) {
+      this.normalize().scaleMult(max);
+    }
+  }
+
+  //Helper
+  getMagnitude() {
+    return Math.sqrt(this.x ** 2 + this.y ** 2);
+  }
+
+  //Returns new Vector
+  getDistanceVec(vec) {
+    let xDist = vec.pos.x - this.x;
+    let yDist = vec.pos.y - this.y;
+
+    return new Vector2D(xDist, yDist);
+  }
+
+  calcDistance(vec) {
+    let xDist = vec.pos.x - this.x;
+    let yDist = vec.pos.y - this.y;
+
+    return new Vector2D(xDist, yDist).getMagnitude();
   }
 }
 

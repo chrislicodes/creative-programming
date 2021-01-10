@@ -10,6 +10,7 @@ import Boid from "./Boid.js";
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
+//TODO: Make this more stable
 export let width = document.body.clientWidth;
 export let height = document.body.clientHeight;
 
@@ -19,14 +20,6 @@ canvas.height = height;
 const isMobile =
   Math.min(window.screen.width, window.screen.height) < 768 ||
   navigator.userAgent.indexOf("Mobi") > -1;
-
-let parameter = {};
-
-const addParameter = function (key, value) {
-  parameter[key] = value;
-};
-
-addParameter("isMobile", isMobile);
 
 // ------------------------------------------------------------
 // ---- Event Listeners
@@ -38,6 +31,7 @@ let behindTheScenes = false;
 let squareSize = 200;
 let mouseEffectArea = 100;
 
+//Checking for Dev Mode
 ["hashchange", "load"].forEach((event) => {
   window.addEventListener(event, function () {
     if (location.hash === "#dev") {
@@ -48,6 +42,7 @@ let mouseEffectArea = 100;
   });
 });
 
+//Update mouse position
 ["mousemove", "touchmove"].forEach((event) => {
   canvas.addEventListener(event, function (e) {
     mouse.x = e.x;
@@ -55,6 +50,7 @@ let mouseEffectArea = 100;
   });
 });
 
+//Set mouse position to undefined when leaving the canvas
 ["mouseleave", "touchleave"].forEach((event) => {
   canvas.addEventListener(event, function (e) {
     mouse.x = undefined;
@@ -62,6 +58,7 @@ let mouseEffectArea = 100;
   });
 });
 
+//Adapt canvas siye
 addEventListener("resize", () => {
   canvas.width = document.body.clientWidth;
   canvas.height = document.body.clientHeight;
@@ -72,30 +69,62 @@ addEventListener("resize", () => {
 // ------------------------------------------------------------
 // ---- Implementation
 // ------------------------------------------------------------
-let flock = [];
+let flockArr = [];
+let nBoids = 50;
 
+// ---- Spawn n boids
 function init() {
-  for (let i = 0; i < 200; i++) {
-    flock.push(new Boid());
+  flockArr = [];
+  for (const i in [...Array(nBoids)]) {
+    flockArr.push(new Boid("red"));
   }
-  console.log(flock);
+  console.log(flockArr);
 }
 
-// Animation Loop
+// ---- Parameter
+
+let param = {
+  percRadius: 50,
+  alignForce: 1,
+  cohesionForce: 1,
+  separationForce: 1,
+  showPerception: true,
+  showGrid: true,
+};
+
+// ---- GUI
+let gui = new dat.GUI();
+gui.add(param, "showPerception");
+gui.add(param, "showGrid");
+gui.add(param, "percRadius", 10, 200);
+gui.add(param, "alignForce", 0, 2);
+gui.add(param, "cohesionForce", 0, 2);
+gui.add(param, "separationForce", 0, 2);
+
+// ---- Animate boids
 function animate() {
   requestAnimationFrame(animate);
+
+  //Clear the canvas
   c.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (behindTheScenes) {
+  //Dev Mode
+  if (param.showGrid) {
     drawGrid(canvas, c, squareSize);
     drawMousePosition(c, mouse, mouseEffectArea);
   }
 
-  flock.forEach((boid) => {
-    boid.update();
-    boid.bound();
-    boid.flock(flock);
-    boid.show(c);
+  //we need to save the array so the updates are correct
+  flockArr.forEach((boid) => {
+    boid.simulate(
+      c,
+      flockArr,
+      param.percRadius,
+      param.alignForce,
+      param.cohesionForce,
+      param.separationForce,
+      param.showPerception
+    );
   });
 }
 
