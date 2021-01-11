@@ -1,15 +1,19 @@
 "use strict";
-import { Vector2D, randomInt } from "../../utils.js";
+import { Vector2D, randomInt, addVectors } from "../../utils.js";
 import { width, height } from "./app.js";
 
 export default class Boid {
   // INITIALIZATION
-  constructor(color) {
+  constructor(
+    color,
+    xPos = Math.random() * width,
+    yPos = Math.random() * height
+  ) {
     //Color
     this.color = color;
 
     //current position
-    this.pos = new Vector2D(Math.random() * width, Math.random() * height);
+    this.pos = new Vector2D(xPos, yPos);
 
     //Velocity
     this.vel = Vector2D.randomVec(-1, 3);
@@ -17,12 +21,6 @@ export default class Boid {
 
     //Acceleration
     this.accel = new Vector2D();
-
-    //Maximum Steering Force
-    this.maxForce = 0.05;
-
-    //Maximum Magnitude
-    this.maxSpeed = 3;
   }
 
   //Update and calculate positions
@@ -48,7 +46,7 @@ export default class Boid {
   }
 
   //Steer torwards the average direction
-  align(boidsArr, percRadius) {
+  align(boidsArr, percRadius, maxForce, maxSpeed) {
     let percTotal = 0;
     let steerForce = new Vector2D();
 
@@ -72,17 +70,17 @@ export default class Boid {
       steerForce.divideBy(percTotal);
 
       //go along maxSpeed
-      steerForce.setMagnitude(this.maxSpeed);
+      steerForce.setMagnitude(maxSpeed);
 
       steerForce.subVec(this.vel);
-      steerForce.limitMagnitude(this.maxForce);
+      steerForce.limitMagnitude(maxForce);
     }
 
     return steerForce;
   }
 
   //Steer torwards the average position
-  cohesion(boidsArr, percRadius) {
+  cohesion(boidsArr, percRadius, maxForce, maxSpeed) {
     let percTotal = 0;
     let steerForce = new Vector2D();
 
@@ -98,16 +96,16 @@ export default class Boid {
     if (percTotal > 0) {
       steerForce.divideBy(percTotal);
       steerForce.subVec(this.pos);
-      steerForce.setMagnitude(this.maxSpeed);
+      steerForce.setMagnitude(maxSpeed);
 
       //Steering Direction
       steerForce.subVec(this.vel);
-      steerForce.limitMagnitude(this.maxForce);
+      steerForce.limitMagnitude(maxForce);
     }
     return steerForce;
   }
 
-  separation(boidsArr, percRadius) {
+  separation(boidsArr, percRadius, maxForce, maxSpeed) {
     let percTotal = 0;
 
     let steerForce = new Vector2D();
@@ -124,17 +122,30 @@ export default class Boid {
 
     if (percTotal > 0) {
       steerForce.divideBy(percTotal);
-      steerForce.setMagnitude(this.maxSpeed);
+      steerForce.setMagnitude(maxSpeed);
       steerForce.subVec(this.vel);
-      steerForce.limitMagnitude(this.maxForce);
+      steerForce.limitMagnitude(maxForce);
     }
     return steerForce;
   }
 
   drawBoid(c, percRadius, showPerception = false) {
     c.beginPath(); //beginning a new path
-    c.arc(this.pos.x, this.pos.y, 10, 0, Math.PI * 2, false); //creating the outline
+    c.arc(this.pos.x, this.pos.y, 8, 0, Math.PI * 2, false); //creating the outline
+    c.fillStyle = this.color;
     c.fill();
+
+    const from = this.pos;
+    const dist = new Vector2D(this.vel.x, this.vel.y).normalize().scaleMult(25);
+
+    const to = addVectors(from, dist);
+
+    c.lineWidth = 3;
+
+    c.beginPath(); //beginning a new path
+    c.moveTo(from.x, from.y);
+    c.lineTo(to.x, to.y);
+    c.stroke();
 
     if (showPerception) {
       //Perception Radius
@@ -147,12 +158,33 @@ export default class Boid {
     }
   }
 
-  flock(boidsArr, percRadius, alignForce, cohesionForce, separationForce) {
-    let alignment = this.align(boidsArr, percRadius).scaleMult(alignForce);
-    let cohesion = this.cohesion(boidsArr, percRadius).scaleMult(cohesionForce);
-    let separation = this.separation(boidsArr, percRadius).scaleMult(
-      separationForce
-    );
+  flock(
+    boidsArr,
+    percRadius,
+    alignForce,
+    cohesionForce,
+    separationForce,
+    maxForce,
+    maxSpeed
+  ) {
+    let alignment = this.align(
+      boidsArr,
+      percRadius,
+      maxForce,
+      maxSpeed
+    ).scaleMult(alignForce);
+    let cohesion = this.cohesion(
+      boidsArr,
+      percRadius,
+      maxForce,
+      maxSpeed
+    ).scaleMult(cohesionForce);
+    let separation = this.separation(
+      boidsArr,
+      percRadius,
+      maxForce,
+      maxSpeed
+    ).scaleMult(separationForce);
 
     this.accel.addVec(alignment);
     this.accel.addVec(cohesion);
@@ -166,14 +198,18 @@ export default class Boid {
     alignForce = 1,
     cohesionForce = 1,
     separationForce = 1,
-    showPerception = true
+    showPerception = true,
+    maxForce = 0.05,
+    maxSpeed = 3
   ) {
     this.flock(
       boidsArr,
       percRadius,
       alignForce,
       cohesionForce,
-      separationForce
+      separationForce,
+      maxForce,
+      maxSpeed
     );
     this.update();
     this.bound();

@@ -10,16 +10,8 @@ import Boid from "./Boid.js";
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
-//TODO: Make this more stable
-export let width = document.body.clientWidth;
-export let height = document.body.clientHeight;
-
-canvas.width = width;
-canvas.height = height;
-
-const isMobile =
-  Math.min(window.screen.width, window.screen.height) < 768 ||
-  navigator.userAgent.indexOf("Mobi") > -1;
+export let width;
+export let height;
 
 // ------------------------------------------------------------
 // ---- Event Listeners
@@ -58,48 +50,65 @@ let mouseEffectArea = 100;
   });
 });
 
-//Adapt canvas siye
-addEventListener("resize", () => {
-  canvas.width = document.body.clientWidth;
-  canvas.height = document.body.clientHeight;
+canvas.addEventListener("click", function (e) {
+  //getting coordinates of the click
+  const x = e.x;
+  const y = e.y;
 
-  init();
+  //spawn new boid
+  flockArr.push(new Boid("red", x, y));
 });
+
+//Adapt canvas size
+addEventListener("resize", init);
 
 // ------------------------------------------------------------
 // ---- Implementation
 // ------------------------------------------------------------
+
 let flockArr = [];
 let nBoids = 50;
 
 // ---- Spawn n boids
 function init() {
+  canvas.width = document.body.clientWidth;
+  canvas.height = document.body.clientHeight;
+
+  width = canvas.width;
+  height = canvas.height;
+
   flockArr = [];
+
   for (const i in [...Array(nBoids)]) {
-    flockArr.push(new Boid("red"));
+    flockArr.push(new Boid("#e65614"));
   }
+
   console.log(flockArr);
 }
 
 // ---- Parameter
 
 let param = {
-  percRadius: 50,
+  percRadius: 120,
+  maxSpeed: 3,
+  maxForce: 0.05,
   alignForce: 1,
   cohesionForce: 1,
   separationForce: 1,
   showPerception: true,
-  showGrid: true,
+  showGrid: false,
 };
 
 // ---- GUI
 let gui = new dat.GUI();
 gui.add(param, "showPerception");
 gui.add(param, "showGrid");
+gui.add(param, "maxSpeed", 0.1, 10);
 gui.add(param, "percRadius", 10, 200);
-gui.add(param, "alignForce", 0, 2);
-gui.add(param, "cohesionForce", 0, 2);
-gui.add(param, "separationForce", 0, 2);
+gui.add(param, "maxForce", 0, 1);
+gui.add(param, "alignForce", 0, 3);
+gui.add(param, "cohesionForce", 0, 3);
+gui.add(param, "separationForce", 0, 3);
 
 // ---- Animate boids
 function animate() {
@@ -123,7 +132,9 @@ function animate() {
       param.alignForce,
       param.cohesionForce,
       param.separationForce,
-      param.showPerception
+      param.showPerception,
+      param.maxForce,
+      param.maxSpeed
     );
   });
 }
