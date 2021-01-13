@@ -8,14 +8,6 @@ export class Vector2D {
     this.y = y;
   }
 
-  //Static Methods
-  static randomVec(min = -1, max = 1) {
-    let x = randomFloat(min, max);
-    let y = randomFloat(min, max);
-
-    return new Vector2D(x, y);
-  }
-
   //Operations
   addVec(vec) {
     this.x += vec.x;
@@ -97,6 +89,12 @@ export class Vector2D {
   }
 
   //Returns new Vector
+  static randomVec(min = -1, max = 1) {
+    let x = randomFloat(min, max);
+    let y = randomFloat(min, max);
+
+    return new Vector2D(x, y);
+  }
   getDistanceVec(vec) {
     let xDist = vec.pos.x - this.x;
     let yDist = vec.pos.y - this.y;

@@ -1,12 +1,14 @@
 # Todo
 
-[] Make a copy of the flocking array before iterating over everything
-[] Draw the triangle
-[] Implement Field of View
-[] Visualize the field of view
-[] Quadtree Optimization
-[] Standard Optimization
-[] Implement objects to avoid
-[] Implement object that attracts
-[] Avoid walls
-[] make it visually appealing
+- [x] Make a copy of the flocking array before iterating over everything
+- [x] Display the boids as triangle
+- [ ] Implement Field of View
+- [ ] Visualize the field of view
+- [ ] Quadtree Optimization
+- [ ] Standard Optimization
+- [ ] Implement objects that repells
+- [ ] Implement object that attracts
+- [x] Avoid walls
+- [ ] Make wall avoiding smoother with steering force
+- [ ] make it visually appealing (neon mode)
+- [x] add option to spawn boids with different colors

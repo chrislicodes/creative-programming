@@ -1,5 +1,5 @@
 "use strict";
-import { Vector2D, randomInt, addVectors } from "../../utils.js";
+import { Vector2D } from "../../utils.js";
 import { width, height } from "./app.js";
 
 export default class Boid {
@@ -16,8 +16,7 @@ export default class Boid {
     this.pos = new Vector2D(xPos, yPos);
 
     //Velocity
-    this.vel = Vector2D.randomVec(-1, 3);
-    this.vel.setMagnitude(randomInt(2, 4));
+    this.vel = Vector2D.randomVec(-2, 2);
 
     //Acceleration
     this.accel = new Vector2D();
@@ -31,17 +30,35 @@ export default class Boid {
     this.accel.scaleMult(0);
   }
 
-  bound() {
-    if (this.pos.x > width) {
-      this.pos.x = 0;
-    } else if (this.pos.x < 0) {
-      this.pos.x = width;
-    }
+  bound(avoidWalls) {
+    if (avoidWalls) {
+      const turnForce = 0.15;
+      const margin = 200;
 
-    if (this.pos.y > height) {
-      this.pos.y = 0;
-    } else if (this.pos.y < 0) {
-      this.pos.y = height;
+      if (this.pos.x < margin) {
+        this.vel.x += turnForce;
+      }
+      if (this.pos.x > width - margin) {
+        this.vel.x -= turnForce;
+      }
+      if (this.pos.y < margin) {
+        this.vel.y += turnForce;
+      }
+      if (this.pos.y > height - margin) {
+        this.vel.y -= turnForce;
+      }
+    } else {
+      if (this.pos.x > width) {
+        this.pos.x = 0;
+      } else if (this.pos.x < 0) {
+        this.pos.x = width;
+      }
+
+      if (this.pos.y > height) {
+        this.pos.y = 0;
+      } else if (this.pos.y < 0) {
+        this.pos.y = height;
+      }
     }
   }
 
@@ -130,22 +147,20 @@ export default class Boid {
   }
 
   drawBoid(c, percRadius, showPerception = false) {
-    c.beginPath(); //beginning a new path
-    c.arc(this.pos.x, this.pos.y, 8, 0, Math.PI * 2, false); //creating the outline
+    //Draw a triangle
+    const angle = Math.atan2(this.vel.y, this.vel.x);
+    c.translate(this.pos.x, this.pos.y);
+    c.rotate(angle);
+    c.translate(-this.pos.x, -this.pos.y);
     c.fillStyle = this.color;
+    c.beginPath();
+    c.moveTo(this.pos.x, this.pos.y);
+    c.lineTo(this.pos.x - 25, this.pos.y - 8);
+    c.lineTo(this.pos.x - 25, this.pos.y + 8);
+    c.lineTo(this.pos.x, this.pos.y);
     c.fill();
-
-    const from = this.pos;
-    const dist = new Vector2D(this.vel.x, this.vel.y).normalize().scaleMult(25);
-
-    const to = addVectors(from, dist);
-
-    c.lineWidth = 3;
-
-    c.beginPath(); //beginning a new path
-    c.moveTo(from.x, from.y);
-    c.lineTo(to.x, to.y);
     c.stroke();
+    c.setTransform(1, 0, 0, 1, 0, 0);
 
     if (showPerception) {
       //Perception Radius
@@ -200,7 +215,8 @@ export default class Boid {
     separationForce = 1,
     showPerception = true,
     maxForce = 0.05,
-    maxSpeed = 3
+    maxSpeed = 3,
+    avoidWalls = false
   ) {
     this.flock(
       boidsArr,
@@ -212,7 +228,7 @@ export default class Boid {
       maxSpeed
     );
     this.update();
-    this.bound();
+    this.bound(avoidWalls);
     this.drawBoid(ctx, percRadius, showPerception);
   }
 }

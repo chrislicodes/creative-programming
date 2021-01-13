@@ -1,6 +1,6 @@
 "use strict";
 //prettier-ignore
-import { Vector2D, drawGrid, drawMousePosition} from "../../utils.js";
+import { Vector2D, drawGrid, drawMousePosition, randomFloat} from "../../utils.js";
 import Boid from "./Boid.js";
 
 // ------------------------------------------------------------
@@ -56,7 +56,7 @@ canvas.addEventListener("click", function (e) {
   const y = e.y;
 
   //spawn new boid
-  flockArr.push(new Boid("red", x, y));
+  flockArr.push(new Boid(param.color, x, y));
 });
 
 //Adapt canvas size
@@ -66,8 +66,42 @@ addEventListener("resize", init);
 // ---- Implementation
 // ------------------------------------------------------------
 
+// ---- Parameter
+
+let param = {
+  percRadius: 100,
+  maxSpeed: 6,
+  maxForce: 0.05,
+  alignForce: 1.2,
+  cohesionForce: 1.3,
+  separationForce: 1.6,
+  showPerception: false,
+  showGrid: false,
+  avoidWalls: true,
+  artMode: false,
+  color: "#ff6a00",
+  nBoids: 50,
+};
+
+// ---- GUI
+let gui = new dat.GUI();
+gui.add(param, "showPerception");
+gui.add(param, "showGrid");
+gui.add(param, "avoidWalls");
+gui.add(param, "artMode");
+gui.add(param, "maxSpeed", 1, 15);
+gui.add(param, "percRadius", 10, 200);
+gui.add(param, "maxForce", 0, 1);
+gui.add(param, "alignForce", 0, 3);
+gui.add(param, "cohesionForce", 0, 3);
+gui.add(param, "separationForce", 0, 3);
+// gui.add(param, "nBoids", 0, 200);
+
+gui.add(param, "color").onFinishChange(function (value) {
+  param.color = value;
+});
+
 let flockArr = [];
-let nBoids = 50;
 
 // ---- Spawn n boids
 function init() {
@@ -79,43 +113,25 @@ function init() {
 
   flockArr = [];
 
-  for (const i in [...Array(nBoids)]) {
-    flockArr.push(new Boid("#e65614"));
+  for (const i in [...Array(param.nBoids)]) {
+    flockArr.push(
+      new Boid(
+        param.color,
+        width / 2 + randomFloat(-10, 10),
+        height / 2 + randomFloat(-10, 10)
+      )
+    );
   }
-
-  console.log(flockArr);
 }
-
-// ---- Parameter
-
-let param = {
-  percRadius: 120,
-  maxSpeed: 3,
-  maxForce: 0.05,
-  alignForce: 1,
-  cohesionForce: 1,
-  separationForce: 1,
-  showPerception: true,
-  showGrid: false,
-};
-
-// ---- GUI
-let gui = new dat.GUI();
-gui.add(param, "showPerception");
-gui.add(param, "showGrid");
-gui.add(param, "maxSpeed", 0.1, 10);
-gui.add(param, "percRadius", 10, 200);
-gui.add(param, "maxForce", 0, 1);
-gui.add(param, "alignForce", 0, 3);
-gui.add(param, "cohesionForce", 0, 3);
-gui.add(param, "separationForce", 0, 3);
 
 // ---- Animate boids
 function animate() {
   requestAnimationFrame(animate);
 
-  //Clear the canvas
-  c.clearRect(0, 0, canvas.width, canvas.height);
+  if (!param.artMode) {
+    //Clear the canvas
+    c.clearRect(0, 0, canvas.width, canvas.height);
+  }
 
   //Dev Mode
   if (param.showGrid) {
@@ -123,18 +139,22 @@ function animate() {
     drawMousePosition(c, mouse, mouseEffectArea);
   }
 
+  //Creating a copy so that each iteration every boid will be updated on a snapshot
+  const flockArrCopy = flockArr.slice();
+
   //we need to save the array so the updates are correct
   flockArr.forEach((boid) => {
     boid.simulate(
       c,
-      flockArr,
+      flockArrCopy,
       param.percRadius,
       param.alignForce,
       param.cohesionForce,
       param.separationForce,
       param.showPerception,
       param.maxForce,
-      param.maxSpeed
+      param.maxSpeed,
+      param.avoidWalls
     );
   });
 }
