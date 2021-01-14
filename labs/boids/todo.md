@@ -5,6 +5,7 @@
 - [ ] Implement Field of View
 - [ ] Visualize the field of view
 - [ ] Quadtree Optimization
+- [x] Visualize Quadtree
 - [ ] Standard Optimization
 - [ ] Implement objects that repells
 - [ ] Implement object that attracts
