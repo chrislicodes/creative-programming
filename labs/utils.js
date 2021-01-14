@@ -147,7 +147,7 @@ export const drawMousePosition = function (c, mouse, effectArea) {
   c.strokeStyle = "#e72727";
   c.lineWidth = 3;
 
-  //draw the ball
+  //draw the rect
   c.beginPath(); //beginning a new path
   // c.arc(mouse.x, mouse.y, effectArea, 0, Math.PI * 2, false); //creating the outline
   c.rect(

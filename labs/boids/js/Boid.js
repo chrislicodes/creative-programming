@@ -33,7 +33,7 @@ export default class Boid {
   bound(avoidWalls) {
     if (avoidWalls) {
       const turnForce = 0.15;
-      const margin = 200;
+      const margin = 150;
 
       if (this.pos.x < margin) {
         this.vel.x += turnForce;

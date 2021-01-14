@@ -2,6 +2,7 @@
 //prettier-ignore
 import { Vector2D, drawGrid, drawMousePosition, randomFloat} from "../../utils.js";
 import Boid from "./Boid.js";
+import { Rectangle, QuadTree } from "./Quadtree.js";
 
 // ------------------------------------------------------------
 // ---- Standard Setup
@@ -55,8 +56,12 @@ canvas.addEventListener("click", function (e) {
   const x = e.x;
   const y = e.y;
 
+  const boid = new Boid(param.color, x, y);
+
   //spawn new boid
-  flockArr.push(new Boid(param.color, x, y));
+  flockArr.push(boid);
+  quadTree.insert(boid.pos);
+  console.log(quadTree);
 });
 
 //Adapt canvas size
@@ -77,6 +82,7 @@ let param = {
   separationForce: 1.6,
   showPerception: false,
   showGrid: false,
+  showQuadTree: false,
   avoidWalls: true,
   artMode: false,
   color: "#ff6a00",
@@ -87,6 +93,7 @@ let param = {
 let gui = new dat.GUI();
 gui.add(param, "showPerception");
 gui.add(param, "showGrid");
+gui.add(param, "showQuadTree");
 gui.add(param, "avoidWalls");
 gui.add(param, "artMode");
 gui.add(param, "maxSpeed", 1, 15);
@@ -102,6 +109,7 @@ gui.add(param, "color").onFinishChange(function (value) {
 });
 
 let flockArr = [];
+let quadTree;
 
 // ---- Spawn n boids
 function init() {
@@ -113,15 +121,22 @@ function init() {
 
   flockArr = [];
 
+  quadTree = new QuadTree(new Rectangle(0, 0, width, height), 3);
+  console.log(quadTree);
+
   for (const i in [...Array(param.nBoids)]) {
-    flockArr.push(
-      new Boid(
-        param.color,
-        width / 2 + randomFloat(-10, 10),
-        height / 2 + randomFloat(-10, 10)
-      )
+    let boid = new Boid(
+      param.color,
+      width / 2 + randomFloat(-10, 10),
+      height / 2 + randomFloat(-10, 10)
     );
+
+    flockArr.push(boid);
+
+    quadTree.insert(boid.pos);
   }
+
+  console.log(quadTree);
 }
 
 // ---- Animate boids
@@ -137,6 +152,10 @@ function animate() {
   if (param.showGrid) {
     drawGrid(canvas, c, squareSize);
     drawMousePosition(c, mouse, mouseEffectArea);
+  }
+
+  if (param.showQuadTree) {
+    quadTree.show(c);
   }
 
   //Creating a copy so that each iteration every boid will be updated on a snapshot
@@ -156,6 +175,10 @@ function animate() {
       param.maxSpeed,
       param.avoidWalls
     );
+  });
+  quadTree = new QuadTree(new Rectangle(0, 0, width, height), 3);
+  flockArr.forEach((boid) => {
+    quadTree.insert(boid.pos);
   });
 }
 
