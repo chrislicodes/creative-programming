@@ -13,3 +13,4 @@
 - [ ] Make wall avoiding smoother with steering force
 - [ ] make it visually appealing (neon mode)
 - [x] add option to spawn boids with different colors
+- [ ] make drawable walls
