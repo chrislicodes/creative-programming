@@ -1,6 +1,6 @@
 "use strict";
 //prettier-ignore
-import { Vector2D, drawMousePosition, randomFloat } from "../../utils.js";
+import { Vector2D, randomFloat } from "../../utils.js";
 import { Rectangle, QuadTree } from "./Quadtree.js";
 import Boid from "./Boid.js";
 
@@ -18,36 +18,55 @@ export let height;
 // ---- Event Listeners
 // ------------------------------------------------------------
 
-const mouse = new Vector2D(-1000, -1000);
+class Mouse {
+  constructor() {
+    this.pos = new Vector2D(-1000, -1000);
+    this.rect = new Rectangle(this.pos.x - 50, this.pos.y - 50, 100, 100);
+  }
 
-let behindTheScenes = false;
-let squareSize = 200;
-let mouseEffectArea = 100;
+  updateRect() {
+    this.rect = new Rectangle(this.pos.x - 50, this.pos.y - 50, 100, 100);
+  }
 
-//Checking for Dev Mode
-["hashchange", "load"].forEach((event) => {
-  window.addEventListener(event, function () {
-    if (location.hash === "#dev") {
-      behindTheScenes = true;
-    } else {
-      behindTheScenes = false;
+  show(ctx = c) {
+    ctx.beginPath();
+    ctx.arc(mouse.pos.x, mouse.pos.y, 3, 0, 2 * Math.PI, false);
+    ctx.fill();
+    const text = "(" + mouse.x + ", " + mouse.y + ")";
+    ctx.fillText(text, mouse.x + 5, mouse.y);
+
+    //draw the rect
+    ctx.beginPath(); //beginning a new path
+    // ctx.arc(mouse.x, mouse.y, effectArea, 0, Math.PI * 2, false); //creating the outline
+    ctx.rect(mouse.rect.x, mouse.rect.y, mouse.rect.w, mouse.rect.h);
+    ctx.strokeStyle = "black";
+    ctx.stroke();
+  }
+
+  checkIntersect() {
+    let includedPoints = quadTree.query(this.rect);
+
+    for (const boid of includedPoints) {
+      boid.color = "red";
     }
-  });
-});
+  }
+}
+const mouse = new Mouse();
+
+let mouseEffectArea = 100;
 
 //Update mouse position
 ["mousemove", "touchmove"].forEach((event) => {
   canvas.addEventListener(event, function (e) {
-    mouse.x = e.x;
-    mouse.y = e.y;
+    mouse.pos = new Vector2D(e.x, e.y);
+    mouse.updateRect();
   });
 });
 
 //Set mouse position to undefined when leaving the canvas
 ["mouseleave", "touchleave"].forEach((event) => {
   canvas.addEventListener(event, function (e) {
-    mouse.x = undefined;
-    mouse.y = undefined;
+    mouse.pos = new Vector2D(undefined, undefined);
   });
 });
 
@@ -60,8 +79,7 @@ canvas.addEventListener("click", function (e) {
 
   //spawn new boid
   flockArr.push(boid);
-  quadTree.insert(boid.pos);
-  console.log(quadTree);
+  quadTree.insert(boid);
 });
 
 //Adapt canvas size
@@ -107,10 +125,11 @@ let paramFunc = {
 
       flockArr.push(boid);
 
-      quadTree.insert(boid.pos);
+      quadTree.insert(boid);
     }
   },
 };
+
 // ---- GUI
 let gui = new dat.GUI();
 let generalParams = gui.addFolder("General Parameter");
@@ -132,19 +151,20 @@ boidParams.addColor(param, "color").onFinishChange(function (value) {
   param.color = value;
 });
 boidParams.add(paramFunc, "clearBoids");
-boidParams.add(param, "nBoids", 1, 200);
+boidParams.add(param, "nBoids", 1, 1000);
 boidParams.add(paramFunc, "spawnBoids");
 
 let quadParams = gui.addFolder("Quadtree Parameter");
 quadParams.add(param, "showQuadTree");
 quadParams.add(param, "treeCapacity", 1, 30);
-// gui.add(param, "nBoids", 0, 200);
 
 for (const [_, value] of Object.entries(gui.__folders)) {
   value.open();
 }
 
 generalParams.open();
+
+//SETUP
 
 let flockArr = [];
 let quadTree;
@@ -163,7 +183,6 @@ function init() {
     new Rectangle(0, 0, width, height),
     param.treeCapacity
   );
-  console.log(quadTree);
 
   for (const i in [...Array(Math.floor(param.nBoids))]) {
     let boid = new Boid(
@@ -173,11 +192,8 @@ function init() {
     );
 
     flockArr.push(boid);
-
-    quadTree.insert(boid.pos);
+    quadTree.insert(boid);
   }
-
-  console.log(quadTree);
 }
 
 // ---- Animate boids
@@ -185,13 +201,11 @@ function animate() {
   requestAnimationFrame(animate);
 
   if (!param.artMode) {
-    //Clear the canvas
     c.clearRect(0, 0, canvas.width, canvas.height);
   }
 
-  //Dev Mode
   if (param.showMousePos) {
-    drawMousePosition(c, mouse, mouseEffectArea);
+    mouse.show();
   }
 
   if (param.showQuadTree) {
@@ -200,6 +214,19 @@ function animate() {
 
   //Creating a copy so that each iteration every boid will be updated on a snapshot
   const flockArrCopy = flockArr.slice();
+
+  quadTree = new QuadTree(
+    new Rectangle(0, 0, width, height),
+    param.treeCapacity
+  );
+
+  flockArr.forEach((boid) => {
+    quadTree.insert(boid);
+  });
+
+  if (param.showMousePos) {
+    mouse.checkIntersect();
+  }
 
   //we need to save the array so the updates are correct
   flockArr.forEach((boid) => {
@@ -217,13 +244,6 @@ function animate() {
       param.updateBoids,
       param.drawBoids
     );
-  });
-  quadTree = new QuadTree(
-    new Rectangle(0, 0, width, height),
-    param.treeCapacity
-  );
-  flockArr.forEach((boid) => {
-    quadTree.insert(boid.pos);
   });
 }
 

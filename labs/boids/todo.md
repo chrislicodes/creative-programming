@@ -4,7 +4,7 @@
 - [x] Display the boids as triangle
 - [ ] Implement Field of View
 - [ ] Visualize the field of view
-- [ ] Quadtree Optimization
+- [ ] Combine Quadtree with Boid Code
 - [x] Visualize Quadtree
 - [ ] Make it mobile friendly
 - [ ] Standard Optimization

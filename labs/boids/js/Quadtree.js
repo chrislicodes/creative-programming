@@ -1,5 +1,4 @@
-//Learn more about this file here: https://www.youtube.com/watch?v=OJxEcs0w_kE
-//https://github.com/CodingTrain/QuadTree/blob/master/quadtree.js - I made some changes to make it work with the Boid and canvas code
+//https://github.com/CodingTrain/QuadTree/blob/master/quadtree.js - customized to make it work with Boid and Canvas code (source is working with P5.js)
 
 export class QuadTree {
   constructor(boundary, n) {
@@ -11,7 +10,7 @@ export class QuadTree {
 
   insert(point) {
     //Check if the point is located within the current QuadTree, if not, return false
-    if (!this.boundary.contains(point)) {
+    if (!this.boundary.contains(point.pos)) {
       return false;
     }
 
@@ -57,10 +56,41 @@ export class QuadTree {
     this.divided = true;
   }
 
+  query(range, found) {
+    //in the first iteration, init found array
+    if (!found) {
+      found = [];
+    }
+
+    //if the range and the current boundary are not intersecting, then dont look further
+    if (!range.intersects(this.boundary)) {
+      return found;
+    }
+
+    this.boundary.color = "red";
+    //otherwise, grab all points from the points in the current boundary, which are intersecting with the range
+    for (let p of this.points) {
+      if (range.contains(p.pos)) {
+        found.push(p);
+      }
+    }
+
+    //if the current tree is divided, also look into the subboundaries
+    if (this.divided) {
+      this.topLeft.query(range, found);
+      this.bottomLeft.query(range, found);
+      this.bottomRight.query(range, found);
+      this.topRight.query(range, found);
+    }
+
+    return found;
+  }
+
   show(c) {
     //draw the rect
     c.beginPath(); //beginning a new path
     c.rect(this.boundary.x, this.boundary.y, this.boundary.w, this.boundary.h);
+    c.strokeStyle = this.boundary.color;
     c.stroke();
     if (this.divided) {
       this.topRight.show(c);
@@ -78,14 +108,35 @@ export class Rectangle {
     this.y = y; //y pos
     this.w = w; //width
     this.h = h; //height
+    this.color = "black";
   }
 
   contains(point) {
+    //check if the point is contained within the boundaries
     return (
       point.x >= this.x &&
       point.x <= this.x + this.w &&
       point.y >= this.y &&
       point.y <= this.y + this.h
     );
+  }
+
+  intersects(range) {
+    let intersection = !(
+      //prettier-ignore
+      //if range origin is right of the current boundary
+      range.x > this.x + this.w ||
+      
+      //if range origin is below the current boundary
+      range.y > this.y + this.h ||
+
+      //if range + width < current boundary
+      range.x + range.w < this.x ||
+
+      //if range + height < current boundary
+      range.y + range.h < this.y
+    );
+
+    return intersection;
   }
 }
