@@ -137,17 +137,11 @@ export const drawGrid = function (canvas, ctx, squareSize) {
 export const drawMousePosition = function (c, mouse, effectArea) {
   c.beginPath();
   c.arc(mouse.x, mouse.y, 3, 0, 2 * Math.PI, false);
-  c.closePath();
   c.fill();
-  c.fillStyle = "#e72727";
   const text = "(" + mouse.x + ", " + mouse.y + ")";
   c.fillText(text, mouse.x + 5, mouse.y);
 
-  //setting the color
-  c.strokeStyle = "#e72727";
-  c.lineWidth = 3;
-
-  //draw the ball
+  //draw the rect
   c.beginPath(); //beginning a new path
   // c.arc(mouse.x, mouse.y, effectArea, 0, Math.PI * 2, false); //creating the outline
   c.rect(
@@ -156,6 +150,7 @@ export const drawMousePosition = function (c, mouse, effectArea) {
     effectArea * 2,
     effectArea * 2
   );
+  c.strokeStyle = "black";
   c.stroke();
 };
 // ------------------------------------------------------------

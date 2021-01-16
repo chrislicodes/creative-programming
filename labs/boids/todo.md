@@ -4,7 +4,9 @@
 - [x] Display the boids as triangle
 - [ ] Implement Field of View
 - [ ] Visualize the field of view
-- [ ] Quadtree Optimization
+- [ ] Combine Quadtree with Boid Code
+- [x] Visualize Quadtree
+- [ ] Make it mobile friendly
 - [ ] Standard Optimization
 - [ ] Implement objects that repells
 - [ ] Implement object that attracts
@@ -12,3 +14,4 @@
 - [ ] Make wall avoiding smoother with steering force
 - [ ] make it visually appealing (neon mode)
 - [x] add option to spawn boids with different colors
+- [ ] make drawable walls
