@@ -6,6 +6,7 @@
 - [ ] Visualize the field of view
 - [ ] Quadtree Optimization
 - [x] Visualize Quadtree
+- [ ] Make it mobile friendly
 - [ ] Standard Optimization
 - [ ] Implement objects that repells
 - [ ] Implement object that attracts
