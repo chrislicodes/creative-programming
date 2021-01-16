@@ -146,7 +146,7 @@ export default class Boid {
     return steerForce;
   }
 
-  drawBoid(c, percRadius, showPerception = false) {
+  drawBoid(c, percRadius, showPerception) {
     //Draw a triangle
     const angle = Math.atan2(this.vel.y, this.vel.x);
     c.translate(this.pos.x, this.pos.y);
@@ -209,26 +209,33 @@ export default class Boid {
   simulate(
     ctx,
     boidsArr,
-    percRadius = 50,
-    alignForce = 1,
-    cohesionForce = 1,
-    separationForce = 1,
-    showPerception = true,
-    maxForce = 0.05,
-    maxSpeed = 3,
-    avoidWalls = false
+    percRadius,
+    alignForce,
+    cohesionForce,
+    separationForce,
+    showPerception,
+    maxForce,
+    maxSpeed,
+    avoidWalls,
+    updateBoids,
+    drawBoids
   ) {
-    this.flock(
-      boidsArr,
-      percRadius,
-      alignForce,
-      cohesionForce,
-      separationForce,
-      maxForce,
-      maxSpeed
-    );
-    this.update();
-    this.bound(avoidWalls);
-    this.drawBoid(ctx, percRadius, showPerception);
+    if (updateBoids) {
+      this.flock(
+        boidsArr,
+        percRadius,
+        alignForce,
+        cohesionForce,
+        separationForce,
+        maxForce,
+        maxSpeed
+      );
+      this.update();
+      this.bound(avoidWalls);
+    }
+
+    if (drawBoids) {
+      this.drawBoid(ctx, percRadius, showPerception);
+    }
   }
 }
