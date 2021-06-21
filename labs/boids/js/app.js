@@ -100,7 +100,7 @@ let param = {
   separationForce: 1.6,
   showPerception: false,
   showMousePos: false,
-  showQuadTree: false,
+  showQuadTree: true,
   avoidWalls: true,
   artMode: false,
   color: "#ff6a00",
