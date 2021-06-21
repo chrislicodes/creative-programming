@@ -14,3 +14,4 @@ Sandbox for exploring algorithms and simulations for immersive web experiences w
 ## Roadmap
 
 - complete folder and build restructure and refactor
+- Path Finding Algorithms
